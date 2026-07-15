@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Genetics Practice Tool</title>
+  <meta name="description" content="Interactive genetics practice generator with randomized questions, hints, explanations, scoring, and saved progress." />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-container">
+    <nav class="site-nav">
+      <a class="site-brand" href="index.html">
+        <div class="site-brand-mark">AP</div>
+        <span>ampossot.com</span>
+      </a>
+      <div class="site-nav-links" aria-label="Primary navigation">
+        <a href="index.html#tools">Tools</a>
+        <a href="index.html#teaching">Teaching</a>
+        <a href="index.html#research">Research</a>
+        <a href="index.html#about">About</a>
+        <a href="publications_v1.html">Publications</a>
+        <a href="https://scholar.google.com/citations?hl=en&amp;user=jm_Ub4wAAAAJ&amp;view_op=list_works&amp;sortby=pubdate" target="_blank" rel="noopener">Google Scholar</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+  <main class="app">
+    <section class="hero">
+      <div class="eyebrow">Version 5 · Learning-Objective Rotation Edition</div>
+      <h1>Genetics Practice Tool</h1>
+      <p>Generate thousands of carefully tiered genetics problems, get immediate worked feedback, and build mastery with minimal repetition.</p>
+    </section>
+
+    
+<div class="card" style="margin:0 0 22px 0;padding:18px 22px;background:#fff8e6;border:1px solid #f1d48a;border-left:6px solid #e0a400;">
+  <div style="font-weight:800;font-size:1.05rem;color:#8a5a00;margin-bottom:8px;">🚧 Development Notice</div>
+  <div style="color:#5f4b18;line-height:1.6;">
+    <strong>This app is still under active development.</strong> You may occasionally encounter bugs,
+    unexpected behaviour, or questions that need refinement. If you find an issue, please report it so it can be corrected in future updates.
+  </div>
+</div>
+
+
+
+    <section class="dashboard" id="dashboard">
+      <div class="card dashboard-intro">
+        <h2>Choose how you want to practise</h2>
+        <p>Select a mode below. You can jump into a quick random set, focus on one topic, take a timed quiz, or review your saved performance.</p>
+      </div>
+
+      <div class="dashboard-grid">
+        <button class="mode-card" type="button" data-mode="random">
+          <div class="mode-icon">🧬</div>
+          <div>
+            <h3>Random Practice</h3>
+            <p>A balanced mix of genetics questions from all available categories.</p>
+          </div>
+          <span class="mode-tag">10 questions</span>
+        </button>
+
+        <button class="mode-card" type="button" data-mode="topic">
+          <div class="mode-icon">🎯</div>
+          <div>
+            <h3>Topic Practice</h3>
+            <p>Choose one genetics topic and focus your practice where it matters most.</p>
+          </div>
+          <span class="mode-tag">Custom focus</span>
+        </button>
+
+        <button class="mode-card" type="button" data-mode="challenge">
+          <div class="mode-icon">📈</div>
+          <div>
+            <h3>Challenge Mode</h3>
+            <p>Advanced questions only, with fewer clues and more multi-step reasoning.</p>
+          </div>
+          <span class="mode-tag">Advanced</span>
+        </button>
+
+        <button class="mode-card" type="button" data-mode="daily">
+          <div class="mode-icon">🔥</div>
+          <div>
+            <h3>Daily Challenge</h3>
+            <p>A short five-question set that stays consistent for the current day.</p>
+          </div>
+          <span class="mode-tag">5 questions</span>
+        </button>
+
+        <button class="mode-card" type="button" data-mode="timed">
+          <div class="mode-icon">🏆</div>
+          <div>
+            <h3>Timed Quiz</h3>
+            <p>Complete ten mixed questions before the five-minute timer expires.</p>
+          </div>
+          <span class="mode-tag">5 minutes</span>
+        </button>
+
+        <button class="mode-card" type="button" data-mode="stats">
+          <div class="mode-icon">📊</div>
+          <div>
+            <h3>My Statistics</h3>
+            <p>Review your attempts, accuracy, correct answers, and current streak.</p>
+          </div>
+          <span class="mode-tag">Saved locally</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="card stats-panel hidden" id="statsPanel">
+      <div class="practice-toolbar">
+        <div>
+          <div class="section-title">Performance dashboard</div>
+          <h2>My Statistics</h2>
+        </div>
+        <button class="secondary" type="button" id="statsHomeBtn">← Back to dashboard</button>
+      </div>
+
+      <div class="stats-large">
+        <div class="stat"><strong id="statsAttempted">0</strong><span>Total attempted</span></div>
+        <div class="stat"><strong id="statsCorrect">0</strong><span>Total correct</span></div>
+        <div class="stat"><strong id="statsAccuracy">0%</strong><span>Overall accuracy</span></div>
+        <div class="stat"><strong id="statsStreak">0</strong><span>Current streak</span></div>
+      </div>
+
+      <div class="stats-message" id="statsMessage"></div>
+    </section>
+
+    <section class="practice-shell hidden" id="practiceShell">
+      <div class="practice-toolbar">
+        <div class="mode-summary">
+          <button class="secondary" type="button" id="homeBtn">← Dashboard</button>
+          <strong id="activeModeLabel">Random Practice</strong>
+          <span class="timer" id="timer">05:00</span>
+        </div>
+      </div>
+
+    <div class="grid">
+      <aside class="card sidebar">
+        <div class="section-title">Practice settings</div>
+
+        <div class="control">
+          <label for="topic">Topic</label>
+          <select id="topic">
+            <option value="mixed">Mixed practice</option>
+            <option value="monohybrid">Monohybrid crosses</option>
+            <option value="gametes">Gametes and genotype logic</option>
+            <option value="testcross">Testcrosses and reverse inference</option>
+            <option value="dihybrid">Dihybrid probability</option>
+            <option value="nonmendelian">Incomplete dominance and codominance</option>
+            <option value="sexlinked">X-linked inheritance</option>
+            <option value="chisquare">Chi-square reasoning</option>
+            <option value="pedigree">Pedigree-style inference</option>
+            <option value="linkage">Linkage and recombination</option>
+            <option value="interactions">Gene interactions and epistasis</option>
+          </select>
+        </div>
+
+        <div class="control">
+          <label for="difficulty">Difficulty</label>
+          <select id="difficulty">
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><strong id="attempted">0</strong><span>Attempted</span></div>
+          <div class="stat"><strong id="correct">0</strong><span>Correct</span></div>
+          <div class="stat"><strong id="accuracy">0%</strong><span>Accuracy</span></div>
+          <div class="stat"><strong id="streak">0</strong><span>Streak</span></div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span>Session progress</span>
+            <span id="progressText">0 / 10</span>
+          </div>
+          <div class="progress"><div id="progressBar"></div></div>
+        </div>
+
+        <div class="side-actions">
+          <button class="secondary" id="newSessionBtn">Start new 10-question session</button>
+          <button class="ghost" id="resetProgressBtn">Reset saved progress</button>
+        </div>
+
+        <p class="small-note">Progress is stored only in this browser. Version 5 rotates both cognitive tasks and learning objectives, states every genetic assumption needed to solve each problem, and uses expanded chapter-level question families to prevent conceptual repetition.</p>
+      </aside>
+
+      <section class="card main-card">
+        <div class="topline">
+          <span class="pill" id="topicPill">🧬 Mixed practice</span>
+          <span class="question-number" id="questionNumber">Question 1 of 10</span>
+        </div>
+
+        <div class="context" id="context"></div>
+        <div class="question" id="question"></div>
+
+        <div class="options" id="options"></div>
+
+        <div class="typed-answer" id="typedAnswerWrap">
+          <input id="typedAnswer" type="text" autocomplete="off" placeholder="Type your answer here" />
+        </div>
+
+        <div class="actions">
+          <button class="primary" id="checkBtn">Check answer</button>
+          <button class="secondary" id="hintBtn">Show hint</button>
+          <button class="secondary" id="nextBtn" disabled>Next question</button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+      </section>
+    </div>
+    </section>
+
+    <div class="footer">Version 5 · A learning-objective-driven genetics engine for varied, self-contained practice.</div>
+  </main>
+
+<script type="module" src="js/app.js"></script>
+
+
+<footer class="site-footer" id="contact">
+  <div class="site-container site-footer-grid">
+    <div>
+      <strong>Dr. Andres Posso-Terranova</strong><br/>
+      Genetics • Evolution • Interactive Biology Education
+    </div>
+    <div class="site-footer-links">
+      <a href="mailto:andres.posso@usask.ca">Email</a>
+      <a href="index.html#tools">Tools</a>
+      <a href="index.html#research">Research</a>
+      <a href="publications_v1.html">Publications</a>
+    </div>
+  </div>
+</footer>
+<script data-cfasync="false" data-color="#0F766E" data-description="Support the development of free genetics education." data-id="ampossot" data-message="Support Education. Inspire Discovery." data-name="BMC-Widget" data-position="Right" data-x_margin="20" data-y_margin="20" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"></script>
+
+</body>
+</html>
