@@ -1,5 +1,6 @@
 import { registerLinkageTopic } from "../topics/linkage.js";
 import { registerMonohybridTopic } from "../topics/monohybrid.js";
+import { registerGametesTopic } from "../topics/gametes.js";
 
 "use strict";
 
@@ -195,44 +196,7 @@ import { registerMonohybridTopic } from "../topics/monohybrid.js";
 
   // MONOHYBRID is registered from topics/monohybrid.js
 
-  // GAMETES
-  add("gametes","beginner","gamete-count",()=>{
-    const n=pick([0,1,2,3,4]), fixed=randInt(0,2), genotype=[];
-    const letters=["A","B","C","D","E","F"];
-    for(let i=0;i<n;i++) genotype.push(`${letters[i]}${letters[i].toLowerCase()}`);
-    for(let i=n;i<n+fixed;i++) genotype.push(rng()<.5?`${letters[i]}${letters[i]}`:`${letters[i].toLowerCase()}${letters[i].toLowerCase()}`);
-    const g=shuffle(genotype).join(""), ans=String(2**n);
-    return q("gamete-count","gametes","beginner","Assume independent assortment and no linkage.",`How many genetically distinct gamete types can genotype ${g||"AABB"} produce?`,chooseOptions(ans,[String(Math.max(1,n)),String(2*n),String(2**Math.max(0,n-1)),String(2**Math.min(5,n+1))]),ans,"Use 2ⁿ, where n is the number of heterozygous loci.",`There are ${n} heterozygous loci, so 2^${n} = ${ans} gamete type(s).`);
-  });
-
-  add("gametes","beginner","valid-gamete",()=>{
-    const c=pick([
-      {g:"AaBb",valid:"Ab",bad:["AA","Bb","Aab"]},
-      {g:"AaBBCc",valid:"aBC",bad:["AaC","BBc","abC"]},
-      {g:"AABbDd",valid:"AbD",bad:["AAD","Bbd","abd"]},
-      {g:"AaBbCc",valid:"abC",bad:["Aabc","BbC","aaC"]}
-    ]);
-    return q("valid-gamete","gametes","beginner","A gamete contains one allele from each locus.",`Which is a possible gamete from genotype ${c.g}?`,[c.valid,...c.bad],c.valid,"Check that the gamete contains exactly one allele from every gene.",`${c.valid} contains one allele from each locus and only alleles present in the parent.`);
-  });
-
-  add("gametes","intermediate","gamete-probability",()=>{
-    const n=pick([2,3,4]), target="A"+"b"+(n>=3?"C":"")+(n===4?"d":""), ans=`1/${2**n}`;
-    const genotype=["Aa","Bb",...(n>=3?["Cc"]:[]),...(n===4?["Dd"]:[])].join("");
-    return q("gamete-probability","gametes","intermediate",`The loci assort independently. The parent is ${genotype}.`,`What is the probability of producing gamete ${target}?`,fractionOptions(ans),ans,"Multiply 1/2 for each specified allele from a heterozygous locus.",`There are ${n} independent 1/2 choices, so the probability is (1/2)^${n} = ${ans}.`);
-  });
-
-  add("gametes","intermediate","offspring-genotype",()=>{
-    const c=pick([
-      {cross:"AaBb × AaBb",ask:"Aabb",ans:"1/8",calc:"1/2 × 1/4"},
-      {cross:"AaBb × Aabb",ask:"aaBb",ans:"1/8",calc:"1/4 × 1/2"},
-      {cross:"AaBbCc × AaBbCc",ask:"aabbcc",ans:"1/64",calc:"1/4 × 1/4 × 1/4"},
-      {cross:"AABb × AaBb",ask:"AAbb",ans:"1/8",calc:"1/2 × 1/4"},
-      {cross:"AaBBCc × aaBbCc",ask:"AaBBCc",ans:"1/8",calc:"1/2 × 1/2 × 1/2"}
-    ]);
-    return q("offspring-genotype","gametes","intermediate","Assume independent assortment.",`For ${c.cross}, what is the probability of genotype ${c.ask}?`,fractionOptions(c.ans),c.ans,"Solve each locus separately, then multiply the probabilities.",`${c.calc} = ${c.ans}.`);
-  });
-
-  add("gametes","advanced","gamete-with-linkage-warning",()=>q("gamete-linkage-warning","gametes","advanced","An individual has genotype AB/ab, and A and B are tightly linked.","Which statement is most accurate?",["AB and ab gametes are usually more frequent than Ab and aB gametes","All four gametes must occur at equal frequency","Only AB gametes can be produced","Recombination can never occur"],"AB and ab gametes are usually more frequent than Ab and aB gametes","Parental haplotypes are favored when loci are linked.","In coupling phase AB/ab, AB and ab are parental gametes. Recombinant Ab and aB gametes occur less often when recombination frequency is below 50%."));
+  // GAMETES & MEIOSIS is registered from topics/gametes.js
 
   // TESTCROSS
   add("testcross","beginner","testcross-purpose",()=>q("testcross-purpose","testcross","beginner","An organism shows a dominant phenotype, but its genotype is unknown.","Why is it crossed with a homozygous recessive individual in a testcross?",["Recessive offspring reveal whether the unknown parent carries the recessive allele","The recessive parent forces all offspring to be recessive","It increases the mutation rate","It proves the dominant allele is more common"],"Recessive offspring reveal whether the unknown parent carries the recessive allele","The recessive tester contributes only recessive alleles.","Any recessive offspring must receive a recessive allele from the unknown parent, revealing that it is heterozygous."));
@@ -419,24 +383,6 @@ import { registerMonohybridTopic } from "../topics/monohybrid.js";
   });
 
   // EXTRA VARIETY FOR PREVIOUSLY SPARSE TOPIC/DIFFICULTY COMBINATIONS
-  add("gametes","advanced","linked-gamete-probability",()=>{
-    const rf=pick([8,12,16,20,24,30,36,40]);
-    const phase=pick(["coupling","repulsion"]);
-    const recombinant=rng()<0.5;
-    const gamete=phase==="coupling"
-      ? (recombinant?pick(["Ab","aB"]):pick(["AB","ab"]))
-      : (recombinant?pick(["AB","ab"]):pick(["Ab","aB"]));
-    const probability=(recombinant?rf/2:(100-rf)/2);
-    const haplotypes=phase==="coupling"?"AB/ab":"Ab/aB";
-    const correct=`${probability}%`;
-    return q("linked-gamete-probability","gametes","advanced",
-      `A heterozygote has haplotypes ${haplotypes}, and the recombination frequency between A and B is ${rf}%.`,
-      `What percentage of its gametes is expected to be ${gamete}?`,
-      chooseOptions(correct,[`${rf}%`,`${100-rf}%`,`${50-probability}%`]),correct,
-      `Split the total recombinant frequency equally between the two recombinant classes; split the nonrecombinant frequency equally between the two parental classes.`,
-      `${gamete} is ${recombinant?"a recombinant":"a parental"} gamete. Its expected frequency is ${recombinant?`${rf}% ÷ 2`:`${100-rf}% ÷ 2`} = ${correct}.`);
-  });
-
   add("testcross","advanced","testcross-no-recessives",()=>{
     const n=pick([4,5,6,8,10]);
     const probability=(0.5**n)*100;
@@ -482,6 +428,10 @@ import { registerMonohybridTopic } from "../topics/monohybrid.js";
   }
 
     registerMonohybridTopic({
+      add, q, pick, shuffle, chooseOptions, fractionOptions,
+      traits, traitRule, rng: () => rng
+    });
+    registerGametesTopic({
       add, q, pick, shuffle, chooseOptions, fractionOptions,
       traits, traitRule, rng: () => rng
     });
