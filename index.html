@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Genetics Practice Engine 2.0</title>
-  <meta name="description" content="A structured undergraduate genetics learning platform with adaptive practice, immediate explanations, and chapter-based learning." />
+  <title>Genetics Practice Tool</title>
+  <meta name="description" content="Interactive genetics practice generator with randomized questions, hints, explanations, scoring, and saved progress." />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
@@ -24,7 +24,6 @@
         <a href="publications_v1.html">Publications</a>
         <a href="https://scholar.google.com/citations?hl=en&amp;user=jm_Ub4wAAAAJ&amp;view_op=list_works&amp;sortby=pubdate" target="_blank" rel="noopener">Google Scholar</a>
         <a href="index.html#contact">Contact</a>
-        <a class="nav-cta" href="#topicLibrary">Start practising</a>
       </div>
     </nav>
   </div>
@@ -33,14 +32,13 @@
   <main class="app">
     <section class="hero">
       <div class="hero-content">
-        <div class="eyebrow"><span class="live-dot"></span> Genetics Practice Engine 2.0</div>
-        <h1>Master genetics, one reasoning skill at a time.</h1>
-        <p>Build confidence through structured practice, immediate explanations, and question families designed around how geneticists actually reason.</p>
+        <div class="eyebrow">Genetics Practice Engine 2.0</div>
+        <h1>Learn genetics by thinking like a geneticist.</h1>
+        <p>Choose a chapter, practise at your level, and receive immediate explanations built around real learning objectives—not recycled question templates.</p>
         <div class="hero-actions">
           <a class="hero-primary" href="#topicLibrary">Explore topics</a>
           <button class="hero-secondary" type="button" data-launch-mode="random">Start random practice</button>
         </div>
-        <div class="hero-badge-row"><span class="hero-badge">No account required</span><span class="hero-badge">Progress saved locally</span><span class="hero-badge">Free for students</span></div>
         <div class="hero-proof">
           <span><strong>2</strong> rebuilt flagship chapters</span>
           <span><strong>150+</strong> reasoning families</span>
@@ -66,59 +64,17 @@
       <span class="development-badge">Beta</span>
     </div>
 
-    <section class="learning-journey" aria-label="Learning journey">
-      <div class="journey-intro">
-        <span class="journey-kicker">Your learning path</span>
-        <strong>Start with foundations. Build toward genetic analysis.</strong>
-      </div>
-      <div class="journey-steps">
-        <div class="journey-step complete">
-          <span class="journey-number">1</span>
-          <div><strong>Foundations</strong><small>Monohybrid + Meiosis</small></div>
-        </div>
-        <div class="journey-line active"></div>
-        <div class="journey-step">
-          <span class="journey-number">2</span>
-          <div><strong>Inheritance</strong><small>Dihybrid + X-linked</small></div>
-        </div>
-        <div class="journey-line"></div>
-        <div class="journey-step">
-          <span class="journey-number">3</span>
-          <div><strong>Analysis</strong><small>Pedigrees + Chi-square</small></div>
-        </div>
-        <div class="journey-line"></div>
-        <div class="journey-step">
-          <span class="journey-number">4</span>
-          <div><strong>Advanced</strong><small>Linkage + Epistasis</small></div>
-        </div>
-      </div>
-    </section>
+
 
     <section class="dashboard" id="dashboard">
-
-      <section class="continue-panel">
-        <div class="continue-main">
-          <div class="continue-icon">🧬</div>
-          <div>
-            <span class="continue-kicker">Recommended next</span>
-            <h2>Continue with Gametes &amp; Meiosis</h2>
-            <p>Eight learning objectives covering chromosome structure, segregation, assortment, recombination, linkage, and nondisjunction.</p>
-          </div>
-        </div>
-        <div class="continue-actions">
-          <button type="button" class="continue-button" data-topic-launch="gametes">Continue chapter</button>
-          <span>111 reasoning families</span>
-        </div>
-      </section>
-
       <section class="topic-library" id="topicLibrary">
         <div class="section-heading">
           <div>
-            <div class="section-kicker">Course curriculum</div>
-            <h2>Choose your next genetics chapter</h2>
-            <p>Start with a chapter, choose your level, and let the engine rotate through different learning objectives and reasoning tasks.</p>
+            <div class="section-kicker">Chapter library</div>
+            <h2>What would you like to master today?</h2>
+            <p>Each card opens a focused 10-question session. Choose your difficulty once the session begins.</p>
           </div>
-          <span class="library-count">10 interactive chapters</span>
+          <span class="library-count">10 genetics chapters</span>
         </div>
 
         <div class="topic-grid">
@@ -206,7 +162,7 @@
         <div class="section-heading compact">
           <div>
             <div class="section-kicker">Practice modes</div>
-            <h2>Choose a different way to practise</h2>
+            <h2>Or let the engine choose the experience</h2>
           </div>
         </div>
 
