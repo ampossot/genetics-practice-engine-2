@@ -9,7 +9,7 @@
  * existing "gametes" topic.
  */
 
-export function registerMeiosis7Topic(ctx) {
+export function registerObjective07(ctx) {
   const { add, q, pick, chooseOptions } = ctx;
 
   const OBJECTIVE =

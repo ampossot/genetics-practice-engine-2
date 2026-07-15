@@ -8,7 +8,7 @@
  * registers both modules into the same "gametes" topic.
  */
 
-export function registerMeiosis5Topic(ctx) {
+export function registerObjective05(ctx) {
   const { add, q, pick, chooseOptions } = ctx;
 
   const OBJECTIVE =
