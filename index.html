@@ -5,7 +5,237 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Genetics Practice Tool</title>
   <meta name="description" content="Interactive genetics practice generator with randomized questions, hints, explanations, scoring, and saved progress." />
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css?v=20260715-3" />
+
+<style>
+  /* Engine 2.0 landing page — embedded to prevent CSS deployment mismatch */
+  .engine-hero{
+    position:relative;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 300px;
+    align-items:center;
+    gap:34px;
+    margin-bottom:22px;
+    padding:clamp(34px,5vw,58px);
+    border-radius:30px;
+    color:#fff;
+    background:linear-gradient(135deg,#0d5f52 0%,#168873 58%,#39ae91 100%);
+    box-shadow:0 24px 60px rgba(16,91,76,.22);
+  }
+  .engine-hero::before{
+    content:"";
+    position:absolute;
+    width:360px;height:360px;
+    right:-120px;top:-180px;
+    border:2px solid rgba(255,255,255,.13);
+    border-radius:50%;
+  }
+  .engine-hero-copy{position:relative;z-index:2}
+  .engine-eyebrow{
+    margin-bottom:10px;
+    font-size:.76rem;
+    font-weight:900;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.8);
+  }
+  .engine-hero h1{
+    max-width:760px;
+    margin:0 0 16px;
+    font-size:clamp(2.5rem,5vw,4.6rem);
+    line-height:1;
+    letter-spacing:-.055em;
+  }
+  .engine-hero p{
+    max-width:680px;
+    margin:0;
+    color:rgba(255,255,255,.88);
+    font-size:1.05rem;
+    line-height:1.65;
+  }
+  .engine-hero-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:11px;
+    margin-top:25px;
+  }
+  .engine-hero-actions a,
+  .engine-hero-actions button{
+    min-height:47px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:14px;
+    padding:12px 18px;
+    font-weight:850;
+    text-decoration:none;
+  }
+  .engine-hero-primary{
+    color:#0e6757;
+    background:#fff;
+    box-shadow:0 12px 26px rgba(0,0,0,.14);
+  }
+  .engine-hero-secondary{
+    color:#fff;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.22);
+  }
+  .engine-hero-art{
+    position:relative;
+    z-index:2;
+    min-height:220px;
+    display:grid;
+    place-items:center;
+  }
+  .engine-dna{
+    width:150px;height:150px;
+    display:grid;place-items:center;
+    border-radius:42px;
+    font-size:4.7rem;
+    background:rgba(255,255,255,.13);
+    border:1px solid rgba(255,255,255,.2);
+    box-shadow:0 22px 48px rgba(0,0,0,.17);
+  }
+
+  .engine-notice{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:28px;
+    padding:15px 18px;
+    border:1px solid #d9e7e2;
+    border-radius:17px;
+    background:rgba(255,255,255,.82);
+    box-shadow:0 10px 28px rgba(25,71,59,.06);
+  }
+  .engine-notice-icon{
+    flex:0 0 42px;
+    width:42px;height:42px;
+    display:grid;place-items:center;
+    border-radius:13px;
+    background:#e8f4f0;
+  }
+  .engine-notice strong{display:block;margin-bottom:3px}
+  .engine-notice p{margin:0;color:#61756f;font-size:.9rem;line-height:1.5}
+
+  .engine-section-head{
+    display:flex;
+    align-items:end;
+    justify-content:space-between;
+    gap:20px;
+    margin:0 0 17px;
+  }
+  .engine-section-head h2{
+    margin:0;
+    font-size:clamp(1.7rem,3vw,2.45rem);
+    letter-spacing:-.035em;
+  }
+  .engine-section-head p{
+    max-width:700px;
+    margin:7px 0 0;
+    color:#61756f;
+    line-height:1.55;
+  }
+  .engine-kicker{
+    margin-bottom:6px;
+    color:#178a72;
+    font-size:.74rem;
+    font-weight:900;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+  }
+
+  .engine-topics{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:16px;
+    margin-bottom:32px;
+  }
+  .engine-topic{
+    min-height:225px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    gap:18px;
+    padding:21px;
+    text-align:left;
+    color:#18312c;
+    background:#fff;
+    border:1px solid #d9e7e2;
+    border-radius:22px;
+    box-shadow:0 12px 32px rgba(25,71,59,.08);
+  }
+  .engine-topic:hover{
+    transform:translateY(-4px);
+    border-color:#8fcbbb;
+    box-shadow:0 22px 44px rgba(25,71,59,.14);
+  }
+  .engine-topic.featured{
+    color:#fff;
+    background:linear-gradient(145deg,#124d45,#147c67);
+    border-color:transparent;
+  }
+  .engine-topic.featured.blue{
+    background:linear-gradient(145deg,#173e59,#176b73);
+  }
+  .engine-topic-top,
+  .engine-topic-bottom{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .engine-topic-icon{
+    width:49px;height:49px;
+    display:grid;place-items:center;
+    border-radius:15px;
+    background:#d9f1ea;
+    font-size:1.55rem;
+  }
+  .featured .engine-topic-icon{background:rgba(255,255,255,.13)}
+  .engine-topic-status{
+    padding:6px 9px;
+    border-radius:999px;
+    color:#0f6b58;
+    background:#dff7ed;
+    font-size:.67rem;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+  }
+  .engine-topic h3{margin:0 0 8px;font-size:1.18rem}
+  .engine-topic p{margin:0;color:#61756f;line-height:1.5;font-size:.9rem}
+  .featured p,.featured .engine-topic-bottom{color:rgba(255,255,255,.78)}
+  .engine-topic-bottom{
+    padding-top:13px;
+    border-top:1px solid rgba(102,134,124,.16);
+    color:#71877f;
+    font-size:.73rem;
+    font-weight:800;
+  }
+  .featured .engine-topic-bottom{border-color:rgba(255,255,255,.14)}
+  .engine-topic-arrow{color:#178a72}
+  .featured .engine-topic-arrow{color:#fff}
+
+  .engine-modes-title{margin-top:4px}
+
+  @media(max-width:950px){
+    .engine-hero{grid-template-columns:1fr}
+    .engine-hero-art{display:none}
+    .engine-topics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media(max-width:620px){
+    .engine-hero{padding:29px 21px;border-radius:24px}
+    .engine-hero h1{font-size:clamp(2.35rem,12vw,3.5rem)}
+    .engine-hero-actions{display:grid}
+    .engine-hero-actions a,.engine-hero-actions button{width:100%}
+    .engine-notice{align-items:flex-start}
+    .engine-topics{grid-template-columns:1fr}
+    .engine-topic{min-height:205px}
+  }
+</style>
+
 </head>
 <body>
 
@@ -30,141 +260,116 @@
 </header>
 
   <main class="app">
-    <section class="hero">
-      <div class="hero-content">
-        <div class="eyebrow">Genetics Practice Engine 2.0</div>
-        <h1>Learn genetics by thinking like a geneticist.</h1>
+    <section class="engine-hero">
+      <div class="engine-hero-copy">
+        <div class="engine-eyebrow">Genetics Practice Engine 2.0</div>
+        <h1>Master genetics through better reasoning.</h1>
         <p>Choose a chapter, practise at your level, and receive immediate explanations built around real learning objectives—not recycled question templates.</p>
-        <div class="hero-actions">
-          <a class="hero-primary" href="#topicLibrary">Explore topics</a>
-          <button class="hero-secondary" type="button" data-launch-mode="random">Start random practice</button>
-        </div>
-        <div class="hero-proof">
-          <span><strong>2</strong> rebuilt flagship chapters</span>
-          <span><strong>150+</strong> reasoning families</span>
-          <span><strong>3</strong> difficulty levels</span>
+        <div class="engine-hero-actions">
+          <a class="engine-hero-primary" href="#topicLibrary">Explore chapters</a>
+          <button class="engine-hero-secondary" type="button" data-launch-mode="random">Start random practice</button>
         </div>
       </div>
-      <div class="hero-visual" aria-hidden="true">
-        <div class="dna-orbit orbit-one"></div>
-        <div class="dna-orbit orbit-two"></div>
-        <div class="hero-gene-card gene-a"><span>A</span><small>Allele</small></div>
-        <div class="hero-gene-card gene-b"><span>a</span><small>Allele</small></div>
-        <div class="hero-chromosome">🧬</div>
+      <div class="engine-hero-art" aria-hidden="true">
+        <div class="engine-dna">🧬</div>
       </div>
     </section>
 
     
-<div class="development-note">
-      <div class="development-icon">🧪</div>
+<div class="engine-notice">
+      <div class="engine-notice-icon">🧪</div>
       <div>
-        <strong>Built in public, improved continuously</strong>
-        <p>This platform is under active development. Monohybrid and Gametes &amp; Meiosis have been fully rebuilt using learning-objective rotation; the remaining chapters are being upgraded next.</p>
+        <strong>Actively developed and continuously improved</strong>
+        <p>Monohybrid and Gametes &amp; Meiosis have been fully rebuilt. The remaining chapters are being upgraded using the same learning-objective approach.</p>
       </div>
-      <span class="development-badge">Beta</span>
     </div>
 
 
 
+
     <section class="dashboard" id="dashboard">
-      <section class="topic-library" id="topicLibrary">
-        <div class="section-heading">
+      <section id="topicLibrary">
+        <div class="engine-section-head">
           <div>
-            <div class="section-kicker">Chapter library</div>
-            <h2>What would you like to master today?</h2>
-            <p>Each card opens a focused 10-question session. Choose your difficulty once the session begins.</p>
+            <div class="engine-kicker">Chapter library</div>
+            <h2>Choose what you want to practise</h2>
+            <p>Start a focused 10-question session, then select Beginner, Intermediate, or Advanced.</p>
           </div>
-          <span class="library-count">10 genetics chapters</span>
         </div>
 
-        <div class="topic-grid">
-          <button class="topic-card topic-featured" type="button" data-topic-launch="monohybrid">
-            <div class="topic-card-top">
-              <span class="topic-icon">🌱</span>
-              <span class="topic-status complete">Fully rebuilt</span>
-            </div>
-            <div>
-              <h3>Monohybrid Inheritance</h3>
-              <p>Dominance, Punnett logic, reverse inference, testcrosses, penetrance, probability, and evidence.</p>
-            </div>
-            <div class="topic-meta">
-              <span>42 reasoning families</span>
-              <span class="topic-arrow">Begin →</span>
-            </div>
+        <div class="engine-topics">
+          <button class="engine-topic featured" type="button" data-topic-launch="monohybrid">
+            <div class="engine-topic-top"><span class="engine-topic-icon">🌱</span><span class="engine-topic-status">Fully rebuilt</span></div>
+            <div><h3>Monohybrid Inheritance</h3><p>Dominance, Punnett logic, reverse inference, probability, penetrance, and evidence.</p></div>
+            <div class="engine-topic-bottom"><span>42 reasoning families</span><span class="engine-topic-arrow">Begin →</span></div>
           </button>
 
-          <button class="topic-card topic-featured topic-meiosis" type="button" data-topic-launch="gametes">
-            <div class="topic-card-top">
-              <span class="topic-icon">🧬</span>
-              <span class="topic-status complete">Fully rebuilt</span>
-            </div>
-            <div>
-              <h3>Gametes &amp; Meiosis</h3>
-              <p>Chromosomes, segregation, independent assortment, crossing over, linkage, and nondisjunction.</p>
-            </div>
-            <div class="topic-meta">
-              <span>111 reasoning families</span>
-              <span class="topic-arrow">Begin →</span>
-            </div>
+          <button class="engine-topic featured blue" type="button" data-topic-launch="gametes">
+            <div class="engine-topic-top"><span class="engine-topic-icon">🧬</span><span class="engine-topic-status">Fully rebuilt</span></div>
+            <div><h3>Gametes &amp; Meiosis</h3><p>Chromosomes, segregation, assortment, crossing over, linkage, and nondisjunction.</p></div>
+            <div class="engine-topic-bottom"><span>111 reasoning families</span><span class="engine-topic-arrow">Begin →</span></div>
           </button>
 
-          <button class="topic-card" type="button" data-topic-launch="testcross">
-            <div class="topic-card-top"><span class="topic-icon">🔎</span><span class="topic-status">Available</span></div>
-            <div><h3>Testcrosses</h3><p>Infer unknown genotypes, interpret offspring, and evaluate the strength of evidence.</p></div>
-            <div class="topic-meta"><span>Reverse inference</span><span class="topic-arrow">Practise →</span></div>
+          <button class="engine-topic" type="button" data-topic-launch="testcross">
+            <div class="engine-topic-top"><span class="engine-topic-icon">🔎</span></div>
+            <div><h3>Testcrosses</h3><p>Infer unknown genotypes and evaluate evidence from offspring.</p></div>
+            <div class="engine-topic-bottom"><span>Reverse inference</span><span class="engine-topic-arrow">Practise →</span></div>
           </button>
 
-          <button class="topic-card" type="button" data-topic-launch="dihybrid">
-            <div class="topic-card-top"><span class="topic-icon">🧩</span><span class="topic-status">Available</span></div>
-            <div><h3>Dihybrid Probability</h3><p>Independent loci, product and sum rules, expected ratios, and multilocus reasoning.</p></div>
-            <div class="topic-meta"><span>Two-gene crosses</span><span class="topic-arrow">Practise →</span></div>
+          <button class="engine-topic" type="button" data-topic-launch="dihybrid">
+            <div class="engine-topic-top"><span class="engine-topic-icon">🧩</span></div>
+            <div><h3>Dihybrid Probability</h3><p>Independent loci, product rules, expected ratios, and multilocus reasoning.</p></div>
+            <div class="engine-topic-bottom"><span>Two-gene crosses</span><span class="engine-topic-arrow">Practise →</span></div>
           </button>
 
-          <button class="topic-card" type="button" data-topic-launch="nonmendelian">
-            <div class="topic-card-top"><span class="topic-icon">🎨</span><span class="topic-status">Available</span></div>
-            <div><h3>Non-Mendelian Inheritance</h3><p>Incomplete dominance, codominance, multiple alleles, penetrance, and expressivity.</p></div>
-            <div class="topic-meta"><span>Beyond simple dominance</span><span class="topic-arrow">Practise →</span></div>
+          <button class="engine-topic" type="button" data-topic-launch="nonmendelian">
+            <div class="engine-topic-top"><span class="engine-topic-icon">🎨</span></div>
+            <div><h3>Non-Mendelian Inheritance</h3><p>Incomplete dominance, codominance, penetrance, and expressivity.</p></div>
+            <div class="engine-topic-bottom"><span>Beyond simple dominance</span><span class="engine-topic-arrow">Practise →</span></div>
           </button>
 
-          <button class="topic-card" type="button" data-topic-launch="sexlinked">
-            <div class="topic-card-top"><span class="topic-icon">♀️</span><span class="topic-status">Available</span></div>
-            <div><h3>X-linked Inheritance</h3><p>Carriers, reciprocal crosses, transmission patterns, and family-risk reasoning.</p></div>
-            <div class="topic-meta"><span>Sex-linked traits</span><span class="topic-arrow">Practise →</span></div>
+          <button class="engine-topic" type="button" data-topic-launch="sexlinked">
+            <div class="engine-topic-top"><span class="engine-topic-icon">♀️</span></div>
+            <div><h3>X-linked Inheritance</h3><p>Carriers, reciprocal crosses, transmission patterns, and risk.</p></div>
+            <div class="engine-topic-bottom"><span>Sex-linked traits</span><span class="engine-topic-arrow">Practise →</span></div>
           </button>
 
-          <button class="topic-card" type="button" data-topic-launch="chisquare">
-            <div class="topic-card-top"><span class="topic-icon">📊</span><span class="topic-status">Available</span></div>
-            <div><h3>Chi-square Reasoning</h3><p>Expected counts, degrees of freedom, hypotheses, assumptions, and interpretation.</p></div>
-            <div class="topic-meta"><span>Genetic data analysis</span><span class="topic-arrow">Practise →</span></div>
+          <button class="engine-topic" type="button" data-topic-launch="chisquare">
+            <div class="engine-topic-top"><span class="engine-topic-icon">📊</span></div>
+            <div><h3>Chi-square Reasoning</h3><p>Expected counts, degrees of freedom, hypotheses, and interpretation.</p></div>
+            <div class="engine-topic-bottom"><span>Data analysis</span><span class="engine-topic-arrow">Practise →</span></div>
           </button>
 
-          <button class="topic-card" type="button" data-topic-launch="pedigree">
-            <div class="topic-card-top"><span class="topic-icon">👪</span><span class="topic-status">Available</span></div>
-            <div><h3>Pedigree Inference</h3><p>Recognize inheritance patterns, infer carriers, and calculate genetic risk.</p></div>
-            <div class="topic-meta"><span>Family genetics</span><span class="topic-arrow">Practise →</span></div>
+          <button class="engine-topic" type="button" data-topic-launch="pedigree">
+            <div class="engine-topic-top"><span class="engine-topic-icon">👪</span></div>
+            <div><h3>Pedigree Inference</h3><p>Recognize inheritance patterns, infer carriers, and calculate risk.</p></div>
+            <div class="engine-topic-bottom"><span>Family genetics</span><span class="engine-topic-arrow">Practise →</span></div>
           </button>
 
-          <button class="topic-card" type="button" data-topic-launch="linkage">
-            <div class="topic-card-top"><span class="topic-icon">🧭</span><span class="topic-status expanded">Expanded</span></div>
-            <div><h3>Linkage &amp; Recombination</h3><p>Phase, parental classes, recombinant classes, mapping, and crossover interpretation.</p></div>
-            <div class="topic-meta"><span>32 question families</span><span class="topic-arrow">Practise →</span></div>
+          <button class="engine-topic" type="button" data-topic-launch="linkage">
+            <div class="engine-topic-top"><span class="engine-topic-icon">🧭</span></div>
+            <div><h3>Linkage &amp; Recombination</h3><p>Phase, parental classes, mapping, and crossover interpretation.</p></div>
+            <div class="engine-topic-bottom"><span>32 question families</span><span class="engine-topic-arrow">Practise →</span></div>
           </button>
 
-          <button class="topic-card" type="button" data-topic-launch="interactions">
-            <div class="topic-card-top"><span class="topic-icon">🧪</span><span class="topic-status">Available</span></div>
-            <div><h3>Gene Interactions</h3><p>Epistasis, pathway reasoning, modified ratios, and interacting genetic loci.</p></div>
-            <div class="topic-meta"><span>Epistasis</span><span class="topic-arrow">Practise →</span></div>
+          <button class="engine-topic" type="button" data-topic-launch="interactions">
+            <div class="engine-topic-top"><span class="engine-topic-icon">🧪</span></div>
+            <div><h3>Gene Interactions</h3><p>Epistasis, pathway reasoning, modified ratios, and interacting loci.</p></div>
+            <div class="engine-topic-bottom"><span>Epistasis</span><span class="engine-topic-arrow">Practise →</span></div>
           </button>
+        </div>
+
+        <div class="engine-section-head engine-modes-title">
+          <div>
+            <div class="engine-kicker">Practice modes</div>
+            <h2>Or choose how you want to practise</h2>
+          </div>
         </div>
       </section>
-
-      <section class="practice-modes">
-        <div class="section-heading compact">
-          <div>
-            <div class="section-kicker">Practice modes</div>
-            <h2>Or let the engine choose the experience</h2>
-          </div>
-        </div>
+      <div class="card dashboard-intro" style="display:none">
+        <h2>Choose how you want to practise</h2>
+        <p>Select a mode below. You can jump into a quick random set, focus on one topic, take a timed quiz, or review your saved performance.</p>
+      </div>
 
       <div class="dashboard-grid">
         <button class="mode-card" type="button" data-mode="random">
@@ -221,7 +426,6 @@
           <span class="mode-tag">Saved locally</span>
         </button>
       </div>
-      </section>
     </section>
 
     <section class="card stats-panel hidden" id="statsPanel">
@@ -302,7 +506,7 @@
           <button class="ghost" id="resetProgressBtn">Reset saved progress</button>
         </div>
 
-        <p class="small-note">Progress is stored only in this browser. The engine rotates learning objectives and reasoning tasks to reduce conceptual repetition while keeping every question self-contained.</p>
+        <p class="small-note">Progress is stored only in this browser. Version 5 rotates both cognitive tasks and learning objectives, states every genetic assumption needed to solve each problem, and uses expanded chapter-level question families to prevent conceptual repetition.</p>
       </aside>
 
       <section class="card main-card">
@@ -331,31 +535,31 @@
     </div>
     </section>
 
-    <div class="footer">Genetics Practice Engine 2.0 · Built around learning objectives, reasoning diversity, and immediate feedback.</div>
+    <div class="footer">Version 5 · A learning-objective-driven genetics engine for varied, self-contained practice.</div>
   </main>
 
 <script type="module" src="js/app.js"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const topicSelect = document.getElementById("topic");
-    const topicMode = document.querySelector('[data-mode="topic"]');
-    const modeButtons = document.querySelectorAll("[data-launch-mode]");
+document.addEventListener("DOMContentLoaded", function () {
+  const topicSelect = document.getElementById("topic");
+  const topicModeButton = document.querySelector('[data-mode="topic"]');
 
-    document.querySelectorAll("[data-topic-launch]").forEach(card => {
-      card.addEventListener("click", () => {
-        topicSelect.value = card.dataset.topicLaunch;
-        topicMode.click();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-    });
-
-    modeButtons.forEach(button => {
-      button.addEventListener("click", () => {
-        const target = document.querySelector(`[data-mode="${button.dataset.launchMode}"]`);
-        if (target) target.click();
-      });
+  document.querySelectorAll("[data-topic-launch]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      if (!topicSelect || !topicModeButton) return;
+      topicSelect.value = button.dataset.topicLaunch;
+      topicModeButton.click();
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
   });
+
+  document.querySelectorAll("[data-launch-mode]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      const target = document.querySelector('[data-mode="' + button.dataset.launchMode + '"]');
+      if (target) target.click();
+    });
+  });
+});
 </script>
 
 
