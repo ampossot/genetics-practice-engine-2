@@ -1,0 +1,121 @@
+Genetics Practice Engine 2.0 Roadmap
+
+After reviewing V5, I don’t think we should continue patching it. We
+should treat V5 as the last version of Generation 1.
+
+Phase 1 — Core Architecture
+
+Split the code into modules while keeping the interface almost
+identical.
+
+practice/
+
+index.html
+
+css/ styles.css
+
+js/ engine.js scheduler.js session.js ui.js storage.js
+
+data/ organisms.js terminology.js
+
+topics/ monohybrid.js gametes.js testcross.js dihybrid.js linkage.js
+pedigree.js chisquare.js sexlinked.js nonmendelian.js epistasis.js
+
+No more massive HTML file.
+
+------------------------------------------------------------------------
+
+Phase 2 — Topic Organization
+
+Every topic becomes almost its own app.
+
+Structure:
+
+Topic ↓ Learning Objective ↓ Reasoning Family ↓ Generator
+
+Example for Monohybrid:
+
+Learning Objectives - Vocabulary - Genotype recognition - Phenotype
+recognition - Punnett squares - Reverse inference - Probability -
+Conditional probability - Scientific reasoning - Experimental design -
+Evidence interpretation
+
+Each objective contains several reasoning families.
+
+------------------------------------------------------------------------
+
+Phase 3 — Smarter Scheduler
+
+Instead of asking:
+
+“Which generator comes next?”
+
+The scheduler asks:
+
+1.  Which learning objective has the student practiced least?
+2.  Which reasoning family within that objective has been used least?
+3.  Generate a randomized question.
+
+This makes practice feel like a guided lesson rather than a random quiz.
+
+------------------------------------------------------------------------
+
+Phase 4 — Expand Every Topic
+
+Target approximately 40–60 reasoning families per topic.
+
+Estimated totals:
+
+-   Monohybrid
+-   Gametes
+-   Testcross
+-   Dihybrid
+-   Non-Mendelian
+-   X-linked
+-   Chi-square
+-   Pedigree
+-   Linkage
+-   Epistasis
+
+Total target: 450–500 reasoning families.
+
+Each family should generate hundreds or thousands of variations.
+
+------------------------------------------------------------------------
+
+Modularity Benefits
+
+Future improvements become easy.
+
+For example:
+
+“Improve Pedigrees.”
+
+Only edit:
+
+topics/pedigree.js
+
+No risk of affecting other topics.
+
+------------------------------------------------------------------------
+
+Genetics Review Checklist
+
+Every new reasoning family must satisfy:
+
+✓ Biologically correct ✓ Self-contained wording ✓ Single unambiguous
+answer ✓ Plausible distractors ✓ Appropriate for BIOL 226 ✓ Clear
+explanation ✓ No hidden assumptions ✓ Randomization verified ✓ Not too
+similar to existing families
+
+------------------------------------------------------------------------
+
+Long-term Goal
+
+Build Genetics Practice Engine 2.0.
+
+Estimated development time: 2–3 weeks of focused work.
+
+Goal: A modular, adaptive undergraduate genetics learning platform with
+thousands of unique, high-quality questions and minimal conceptual
+repetition.

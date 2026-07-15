@@ -1,0 +1,117 @@
+Genetics Practice Engine 2.0 – Development Vision
+
+Excellent! GitHub is now the single source of truth for the project.
+
+From this point forward, we’ll build this as a real software project
+instead of a single massive HTML file.
+
+Development Workflow
+
+GitHub Repository genetics-practice-engine-2
+
+Every improvement should modify only the files that need to change.
+
+------------------------------------------------------------------------
+
+First Milestone
+
+Before adding more genetics content, verify that the modular
+architecture is working correctly.
+
+Checklist:
+
+-   App loads correctly.
+-   Dashboard appears.
+-   Random Practice works.
+-   Topic Practice works.
+-   Linkage still functions.
+-   No browser console errors.
+
+Once this passes, the architecture is considered stable.
+
+------------------------------------------------------------------------
+
+Development Sprints
+
+Sprint 1 - Rebuild Monohybrid completely.
+
+Sprint 2 - Rebuild Gametes.
+
+Sprint 3 - Rebuild Testcrosses.
+
+Sprint 4 - Rebuild Dihybrid.
+
+Sprint 5 - Polish and expand Linkage.
+
+Sprint 6 - Rebuild Pedigrees.
+
+Sprint 7 - Rebuild Chi-square.
+
+Sprint 8 - Rebuild X-linked inheritance.
+
+Sprint 9 - Rebuild Epistasis.
+
+Sprint 10 - Rebuild Non-Mendelian inheritance.
+
+------------------------------------------------------------------------
+
+Engine Design
+
+Rather than exposing individual generators, each topic should export a
+structured object.
+
+Conceptually:
+
+Topic ↓ Learning Objectives ↓ Reasoning Families ↓ Question Generators
+
+The scheduler should not contain genetics knowledge.
+
+Instead, it simply requests:
+
+Topic ↓ Learning Objective ↓ Reasoning Family ↓ Generated Question
+
+This keeps the architecture clean, modular, and easy to maintain.
+
+------------------------------------------------------------------------
+
+Future Expansion
+
+Once Engine 2.0 is stable, new topics can be added independently, for
+example:
+
+-   Population Genetics
+-   Hardy–Weinberg
+-   Evolution
+-   Molecular Biology
+-   PCR
+-   DNA Sequencing
+-   CRISPR
+
+No existing topic should need modification to support these additions.
+
+------------------------------------------------------------------------
+
+Long-Term Vision: Instructor Toolkit
+
+Build a feature that allows instructors to assemble custom practice sets
+by selecting learning objectives.
+
+Example:
+
+Monohybrid ✓ Reverse inference ✓ Conditional probability ✓ Testcross
+
+Linkage ✓ Coupling ✓ Recombination
+
+Then choose “Generate Assignment”.
+
+The engine creates unique question sets for students.
+
+------------------------------------------------------------------------
+
+Ultimate Goal
+
+Do not build just another question generator.
+
+Build a platform that students consider the best place to practice
+undergraduate genetics, and that instructors recognize as a powerful,
+flexible teaching resource.
