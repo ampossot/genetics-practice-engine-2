@@ -12,6 +12,7 @@ import { registerObjective04 } from "./objective04.js";
 import { registerObjective05 } from "./objective05.js";
 import { registerObjective06 } from "./objective06.js";
 import { registerObjective07 } from "./objective07.js";
+import { registerObjective08 } from "./objective08.js";
 
 export function registerGametesTopic(ctx) {
   registerObjective01(ctx);
@@ -21,4 +22,5 @@ export function registerGametesTopic(ctx) {
   registerObjective05(ctx);
   registerObjective06(ctx);
   registerObjective07(ctx);
+  registerObjective08(ctx);
 }

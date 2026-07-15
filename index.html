@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Genetics Practice Tool</title>
-  <meta name="description" content="Interactive genetics practice generator with randomized questions, hints, explanations, scoring, and saved progress." />
+  <title>Genetics Practice Engine 2.0</title>
+  <meta name="description" content="A structured undergraduate genetics learning platform with adaptive practice, immediate explanations, and chapter-based learning." />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
@@ -24,6 +24,7 @@
         <a href="publications_v1.html">Publications</a>
         <a href="https://scholar.google.com/citations?hl=en&amp;user=jm_Ub4wAAAAJ&amp;view_op=list_works&amp;sortby=pubdate" target="_blank" rel="noopener">Google Scholar</a>
         <a href="index.html#contact">Contact</a>
+        <a class="nav-cta" href="#topicLibrary">Start practising</a>
       </div>
     </nav>
   </div>
@@ -31,27 +32,183 @@
 
   <main class="app">
     <section class="hero">
-      <div class="eyebrow">Version 5 · Learning-Objective Rotation Edition</div>
-      <h1>Genetics Practice Tool</h1>
-      <p>Generate thousands of carefully tiered genetics problems, get immediate worked feedback, and build mastery with minimal repetition.</p>
+      <div class="hero-content">
+        <div class="eyebrow"><span class="live-dot"></span> Genetics Practice Engine 2.0</div>
+        <h1>Master genetics, one reasoning skill at a time.</h1>
+        <p>Build confidence through structured practice, immediate explanations, and question families designed around how geneticists actually reason.</p>
+        <div class="hero-actions">
+          <a class="hero-primary" href="#topicLibrary">Explore topics</a>
+          <button class="hero-secondary" type="button" data-launch-mode="random">Start random practice</button>
+        </div>
+        <div class="hero-badge-row"><span class="hero-badge">No account required</span><span class="hero-badge">Progress saved locally</span><span class="hero-badge">Free for students</span></div>
+        <div class="hero-proof">
+          <span><strong>2</strong> rebuilt flagship chapters</span>
+          <span><strong>150+</strong> reasoning families</span>
+          <span><strong>3</strong> difficulty levels</span>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="dna-orbit orbit-one"></div>
+        <div class="dna-orbit orbit-two"></div>
+        <div class="hero-gene-card gene-a"><span>A</span><small>Allele</small></div>
+        <div class="hero-gene-card gene-b"><span>a</span><small>Allele</small></div>
+        <div class="hero-chromosome">🧬</div>
+      </div>
     </section>
 
     
-<div class="card" style="margin:0 0 22px 0;padding:18px 22px;background:#fff8e6;border:1px solid #f1d48a;border-left:6px solid #e0a400;">
-  <div style="font-weight:800;font-size:1.05rem;color:#8a5a00;margin-bottom:8px;">🚧 Development Notice</div>
-  <div style="color:#5f4b18;line-height:1.6;">
-    <strong>This app is still under active development.</strong> You may occasionally encounter bugs,
-    unexpected behaviour, or questions that need refinement. If you find an issue, please report it so it can be corrected in future updates.
-  </div>
-</div>
+<div class="development-note">
+      <div class="development-icon">🧪</div>
+      <div>
+        <strong>Built in public, improved continuously</strong>
+        <p>This platform is under active development. Monohybrid and Gametes &amp; Meiosis have been fully rebuilt using learning-objective rotation; the remaining chapters are being upgraded next.</p>
+      </div>
+      <span class="development-badge">Beta</span>
+    </div>
 
-
+    <section class="learning-journey" aria-label="Learning journey">
+      <div class="journey-intro">
+        <span class="journey-kicker">Your learning path</span>
+        <strong>Start with foundations. Build toward genetic analysis.</strong>
+      </div>
+      <div class="journey-steps">
+        <div class="journey-step complete">
+          <span class="journey-number">1</span>
+          <div><strong>Foundations</strong><small>Monohybrid + Meiosis</small></div>
+        </div>
+        <div class="journey-line active"></div>
+        <div class="journey-step">
+          <span class="journey-number">2</span>
+          <div><strong>Inheritance</strong><small>Dihybrid + X-linked</small></div>
+        </div>
+        <div class="journey-line"></div>
+        <div class="journey-step">
+          <span class="journey-number">3</span>
+          <div><strong>Analysis</strong><small>Pedigrees + Chi-square</small></div>
+        </div>
+        <div class="journey-line"></div>
+        <div class="journey-step">
+          <span class="journey-number">4</span>
+          <div><strong>Advanced</strong><small>Linkage + Epistasis</small></div>
+        </div>
+      </div>
+    </section>
 
     <section class="dashboard" id="dashboard">
-      <div class="card dashboard-intro">
-        <h2>Choose how you want to practise</h2>
-        <p>Select a mode below. You can jump into a quick random set, focus on one topic, take a timed quiz, or review your saved performance.</p>
-      </div>
+
+      <section class="continue-panel">
+        <div class="continue-main">
+          <div class="continue-icon">🧬</div>
+          <div>
+            <span class="continue-kicker">Recommended next</span>
+            <h2>Continue with Gametes &amp; Meiosis</h2>
+            <p>Eight learning objectives covering chromosome structure, segregation, assortment, recombination, linkage, and nondisjunction.</p>
+          </div>
+        </div>
+        <div class="continue-actions">
+          <button type="button" class="continue-button" data-topic-launch="gametes">Continue chapter</button>
+          <span>111 reasoning families</span>
+        </div>
+      </section>
+
+      <section class="topic-library" id="topicLibrary">
+        <div class="section-heading">
+          <div>
+            <div class="section-kicker">Course curriculum</div>
+            <h2>Choose your next genetics chapter</h2>
+            <p>Start with a chapter, choose your level, and let the engine rotate through different learning objectives and reasoning tasks.</p>
+          </div>
+          <span class="library-count">10 interactive chapters</span>
+        </div>
+
+        <div class="topic-grid">
+          <button class="topic-card topic-featured" type="button" data-topic-launch="monohybrid">
+            <div class="topic-card-top">
+              <span class="topic-icon">🌱</span>
+              <span class="topic-status complete">Fully rebuilt</span>
+            </div>
+            <div>
+              <h3>Monohybrid Inheritance</h3>
+              <p>Dominance, Punnett logic, reverse inference, testcrosses, penetrance, probability, and evidence.</p>
+            </div>
+            <div class="topic-meta">
+              <span>42 reasoning families</span>
+              <span class="topic-arrow">Begin →</span>
+            </div>
+          </button>
+
+          <button class="topic-card topic-featured topic-meiosis" type="button" data-topic-launch="gametes">
+            <div class="topic-card-top">
+              <span class="topic-icon">🧬</span>
+              <span class="topic-status complete">Fully rebuilt</span>
+            </div>
+            <div>
+              <h3>Gametes &amp; Meiosis</h3>
+              <p>Chromosomes, segregation, independent assortment, crossing over, linkage, and nondisjunction.</p>
+            </div>
+            <div class="topic-meta">
+              <span>111 reasoning families</span>
+              <span class="topic-arrow">Begin →</span>
+            </div>
+          </button>
+
+          <button class="topic-card" type="button" data-topic-launch="testcross">
+            <div class="topic-card-top"><span class="topic-icon">🔎</span><span class="topic-status">Available</span></div>
+            <div><h3>Testcrosses</h3><p>Infer unknown genotypes, interpret offspring, and evaluate the strength of evidence.</p></div>
+            <div class="topic-meta"><span>Reverse inference</span><span class="topic-arrow">Practise →</span></div>
+          </button>
+
+          <button class="topic-card" type="button" data-topic-launch="dihybrid">
+            <div class="topic-card-top"><span class="topic-icon">🧩</span><span class="topic-status">Available</span></div>
+            <div><h3>Dihybrid Probability</h3><p>Independent loci, product and sum rules, expected ratios, and multilocus reasoning.</p></div>
+            <div class="topic-meta"><span>Two-gene crosses</span><span class="topic-arrow">Practise →</span></div>
+          </button>
+
+          <button class="topic-card" type="button" data-topic-launch="nonmendelian">
+            <div class="topic-card-top"><span class="topic-icon">🎨</span><span class="topic-status">Available</span></div>
+            <div><h3>Non-Mendelian Inheritance</h3><p>Incomplete dominance, codominance, multiple alleles, penetrance, and expressivity.</p></div>
+            <div class="topic-meta"><span>Beyond simple dominance</span><span class="topic-arrow">Practise →</span></div>
+          </button>
+
+          <button class="topic-card" type="button" data-topic-launch="sexlinked">
+            <div class="topic-card-top"><span class="topic-icon">♀️</span><span class="topic-status">Available</span></div>
+            <div><h3>X-linked Inheritance</h3><p>Carriers, reciprocal crosses, transmission patterns, and family-risk reasoning.</p></div>
+            <div class="topic-meta"><span>Sex-linked traits</span><span class="topic-arrow">Practise →</span></div>
+          </button>
+
+          <button class="topic-card" type="button" data-topic-launch="chisquare">
+            <div class="topic-card-top"><span class="topic-icon">📊</span><span class="topic-status">Available</span></div>
+            <div><h3>Chi-square Reasoning</h3><p>Expected counts, degrees of freedom, hypotheses, assumptions, and interpretation.</p></div>
+            <div class="topic-meta"><span>Genetic data analysis</span><span class="topic-arrow">Practise →</span></div>
+          </button>
+
+          <button class="topic-card" type="button" data-topic-launch="pedigree">
+            <div class="topic-card-top"><span class="topic-icon">👪</span><span class="topic-status">Available</span></div>
+            <div><h3>Pedigree Inference</h3><p>Recognize inheritance patterns, infer carriers, and calculate genetic risk.</p></div>
+            <div class="topic-meta"><span>Family genetics</span><span class="topic-arrow">Practise →</span></div>
+          </button>
+
+          <button class="topic-card" type="button" data-topic-launch="linkage">
+            <div class="topic-card-top"><span class="topic-icon">🧭</span><span class="topic-status expanded">Expanded</span></div>
+            <div><h3>Linkage &amp; Recombination</h3><p>Phase, parental classes, recombinant classes, mapping, and crossover interpretation.</p></div>
+            <div class="topic-meta"><span>32 question families</span><span class="topic-arrow">Practise →</span></div>
+          </button>
+
+          <button class="topic-card" type="button" data-topic-launch="interactions">
+            <div class="topic-card-top"><span class="topic-icon">🧪</span><span class="topic-status">Available</span></div>
+            <div><h3>Gene Interactions</h3><p>Epistasis, pathway reasoning, modified ratios, and interacting genetic loci.</p></div>
+            <div class="topic-meta"><span>Epistasis</span><span class="topic-arrow">Practise →</span></div>
+          </button>
+        </div>
+      </section>
+
+      <section class="practice-modes">
+        <div class="section-heading compact">
+          <div>
+            <div class="section-kicker">Practice modes</div>
+            <h2>Choose a different way to practise</h2>
+          </div>
+        </div>
 
       <div class="dashboard-grid">
         <button class="mode-card" type="button" data-mode="random">
@@ -108,6 +265,7 @@
           <span class="mode-tag">Saved locally</span>
         </button>
       </div>
+      </section>
     </section>
 
     <section class="card stats-panel hidden" id="statsPanel">
@@ -188,7 +346,7 @@
           <button class="ghost" id="resetProgressBtn">Reset saved progress</button>
         </div>
 
-        <p class="small-note">Progress is stored only in this browser. Version 5 rotates both cognitive tasks and learning objectives, states every genetic assumption needed to solve each problem, and uses expanded chapter-level question families to prevent conceptual repetition.</p>
+        <p class="small-note">Progress is stored only in this browser. The engine rotates learning objectives and reasoning tasks to reduce conceptual repetition while keeping every question self-contained.</p>
       </aside>
 
       <section class="card main-card">
@@ -217,10 +375,32 @@
     </div>
     </section>
 
-    <div class="footer">Version 5 · A learning-objective-driven genetics engine for varied, self-contained practice.</div>
+    <div class="footer">Genetics Practice Engine 2.0 · Built around learning objectives, reasoning diversity, and immediate feedback.</div>
   </main>
 
 <script type="module" src="js/app.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const topicSelect = document.getElementById("topic");
+    const topicMode = document.querySelector('[data-mode="topic"]');
+    const modeButtons = document.querySelectorAll("[data-launch-mode]");
+
+    document.querySelectorAll("[data-topic-launch]").forEach(card => {
+      card.addEventListener("click", () => {
+        topicSelect.value = card.dataset.topicLaunch;
+        topicMode.click();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    });
+
+    modeButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        const target = document.querySelector(`[data-mode="${button.dataset.launchMode}"]`);
+        if (target) target.click();
+      });
+    });
+  });
+</script>
 
 
 <footer class="site-footer" id="contact">
