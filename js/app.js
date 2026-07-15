@@ -1,4 +1,5 @@
 import { registerLinkageTopic } from "../topics/linkage.js";
+import { registerMonohybridTopic } from "../topics/monohybrid.js";
 
 "use strict";
 
@@ -185,139 +186,14 @@ import { registerLinkageTopic } from "../topics/linkage.js";
     return topic==="linkage" ? (linkageObjectives[id] || cognitiveTaskFor(topic,id)) : cognitiveTaskFor(topic,id);
   }
 
-  const add=(topic,difficulty,id,build)=>bank.push({
+  const add=(topic,difficulty,id,build,metadata={})=>bank.push({
     topic,difficulty,id,
-    task:cognitiveTaskFor(topic,id),
-    objective:learningObjectiveFor(topic,id),
+    task:metadata.task || cognitiveTaskFor(topic,id),
+    objective:metadata.objective || learningObjectiveFor(topic,id),
     build
   });
 
-  // MONOHYBRID
-  add("monohybrid","beginner","mono-phenotype",()=>{
-    const t=pick(traits), cross=pick(["het-het","het-rec","dom-rec","dom-het"]), target=pick(["dominant","recessive"]);
-    const cases={
-      "het-het":{cross:`${t.A}${t.a} × ${t.A}${t.a}`,dominant:"3/4",recessive:"1/4"},
-      "het-rec":{cross:`${t.A}${t.a} × ${t.a}${t.a}`,dominant:"1/2",recessive:"1/2"},
-      "dom-rec":{cross:`${t.A}${t.A} × ${t.a}${t.a}`,dominant:"1",recessive:"0"},
-      "dom-het":{cross:`${t.A}${t.A} × ${t.A}${t.a}`,dominant:"1",recessive:"0"}
-    }[cross];
-    const phenotype=target==="dominant"?t.dom:t.rec;
-    return q("mono-phenotype","monohybrid","beginner",`${traitRule(t)} The cross is ${cases.cross}.`,`What proportion of offspring is expected to show ${phenotype}?`,fractionOptions(cases[target]),cases[target],target==="recessive"?`Only ${t.a}${t.a} produces the recessive phenotype.`:`Both ${t.A}${t.A} and ${t.A}${t.a} produce the dominant phenotype.`,`The expected proportion is ${cases[target]}. Separate genotype from phenotype before counting.`);
-  });
-
-  add("monohybrid","beginner","mono-genotype",()=>{
-    const t=pick(traits), target=pick([`${t.A}${t.A}`,`${t.A}${t.a}`,`${t.a}${t.a}`]);
-    const ans={[`${t.A}${t.A}`]:"1/4",[`${t.A}${t.a}`]:"1/2",[`${t.a}${t.a}`]:"1/4"}[target];
-    return q("mono-genotype","monohybrid","beginner",`${traitRule(t)} Two heterozygous individuals are crossed: ${t.A}${t.a} × ${t.A}${t.a}.`,`What proportion is expected to have genotype ${target}?`,fractionOptions(ans),ans,"A heterozygote × heterozygote cross gives a 1:2:1 genotypic ratio.",`${t.A}${t.A} : ${t.A}${t.a} : ${t.a}${t.a} = 1:2:1, so ${target} occurs with probability ${ans}.`);
-  });
-
-  add("monohybrid","intermediate","mono-counts",()=>{
-    const t=pick(traits), cross=pick(["AaAa","Aaaa"]), n=pick([40,80,120,160,200]), ask=pick(["dominant","recessive"]);
-    const p=cross==="AaAa"?(ask==="dominant"?0.75:0.25):0.5;
-    const expected=n*p;
-    const crossText=cross==="AaAa"?`${t.A}${t.a} × ${t.A}${t.a}`:`${t.A}${t.a} × ${t.a}${t.a}`;
-    return q("mono-counts","monohybrid","intermediate",`${traitRule(t)} A cross ${crossText} produces ${n} offspring.`,`How many offspring are expected to show the ${ask==="dominant"?t.dom:t.rec} phenotype?`,chooseOptions(expected,[n-expected,n/4,n/2,n]),expected,`First find the expected phenotype probability, then multiply by ${n}.`,`The probability is ${p}; ${n} × ${p} = ${expected}.`);
-  });
-
-  add("monohybrid","intermediate","mono-reverse",()=>{
-    const t=pick(traits), c=pick([
-      {outcome:"approximately 3 dominant : 1 recessive",ans:`${t.A}${t.a} × ${t.A}${t.a}`},
-      {outcome:"approximately 1 dominant : 1 recessive",ans:`${t.A}${t.a} × ${t.a}${t.a}`},
-      {outcome:"all dominant and all heterozygous",ans:`${t.A}${t.A} × ${t.a}${t.a}`},
-      {outcome:"all recessive",ans:`${t.a}${t.a} × ${t.a}${t.a}`}
-    ]);
-    const opts=[`${t.A}${t.a} × ${t.A}${t.a}`,`${t.A}${t.a} × ${t.a}${t.a}`,`${t.A}${t.A} × ${t.a}${t.a}`,`${t.a}${t.a} × ${t.a}${t.a}`];
-    return q("mono-reverse","monohybrid","intermediate",`${traitRule(t)}`,`Which cross is expected to produce ${c.outcome}?`,opts,c.ans,"Work backward from the offspring ratio and identify which parental gametes are required.",`${c.ans} produces the stated outcome.`);
-  });
-
-  add("monohybrid","advanced","mono-binomial",()=>{
-    const t=pick(traits), n=pick([3,4,5]), k=randInt(1,n-1), p=0.25;
-    const comb=(n,k)=>{let v=1;for(let i=1;i<=k;i++)v=v*(n-k+i)/i;return v;};
-    const val=comb(n,k)*(p**k)*((1-p)**(n-k));
-    const correct=`${(val*100).toFixed(1)}%`;
-    return q("mono-binomial","monohybrid","advanced",`${traitRule(t)} Two heterozygous individuals are crossed. Each offspring independently has a 1/4 probability of showing the recessive phenotype, ${t.rec}.`,`What is the probability that exactly ${k} of ${n} offspring show ${t.rec}?`,chooseOptions(correct,[`${(p**k*100).toFixed(1)}%`,`${((k/n)*100).toFixed(1)}%`,`${((1-val)*100).toFixed(1)}%`]),correct,"Use the binomial expression C(n,k)pᵏ(1−p)ⁿ⁻ᵏ.",`C(${n},${k})(0.25)^${k}(0.75)^${n-k} = ${correct}.`);
-  });
-
-  add("monohybrid","advanced","mono-at-least-one",()=>{
-    const t=pick(traits), n=pick([2,3,4,5]), noRec=(0.75**n), val=1-noRec, correct=`${(val*100).toFixed(1)}%`;
-    return q("mono-at-least-one","monohybrid","advanced",`${traitRule(t)} Two heterozygous individuals are crossed. Each offspring has a 1/4 probability of showing the recessive phenotype, ${t.rec}.`,`What is the probability that at least one of ${n} offspring shows ${t.rec}?`,chooseOptions(correct,[`${((0.25**n)*100).toFixed(1)}%`,`${(noRec*100).toFixed(1)}%`,`${(n*25)}%`]),correct,"Use the complement: 1 − P(no recessive offspring).",`P(at least one) = 1 − (3/4)^${n} = ${correct}.`);
-  });
-
-
-  add("monohybrid","beginner","mono-identify-genotype",()=>{
-    const t=pick(traits), kind=pick(["homozygous dominant","heterozygous","homozygous recessive"]);
-    const ans=kind==="homozygous dominant"?`${t.A}${t.A}`:kind==="heterozygous"?`${t.A}${t.a}`:`${t.a}${t.a}`;
-    return q("mono-identify-genotype","monohybrid","beginner",`${traitRule(t)}`,`Which genotype is ${kind}?`,[`${t.A}${t.A}`,`${t.A}${t.a}`,`${t.a}${t.a}`,`${t.A}`],ans,"Homozygous means two identical alleles; heterozygous means two different alleles.",`${ans} is ${kind}.`);
-  });
-
-  add("monohybrid","beginner","mono-vocabulary",()=>{
-    const t=pick(traits), c=pick([
-      {stem:`An individual has genotype ${t.A}${t.a}.`,ask:"Which term describes this genotype?",ans:"Heterozygous",opts:["Heterozygous","Homozygous dominant","Homozygous recessive","Hemizygous"]},
-      {stem:`An individual has genotype ${t.a}${t.a}.`,ask:"Which phenotype will it show under complete dominance?",ans:t.rec,opts:[t.dom,t.rec,"Both phenotypes","An intermediate phenotype"]},
-      {stem:`${t.dom} masks ${t.rec} in a heterozygote.`,ask:`Which allele is recessive?`,ans:t.a,opts:[t.A,t.a,`${t.A}${t.a}`,"Neither allele"]}
-    ]);
-    return q("mono-vocabulary","monohybrid","beginner",`${traitRule(t)} ${c.stem}`,c.ask,c.opts,c.ans,"Use the definitions of dominant, recessive, homozygous, and heterozygous.",`The correct answer is ${c.ans}.`);
-  });
-
-  add("monohybrid","beginner","mono-punnett-error",()=>{
-    const t=pick(traits);
-    return q("mono-punnett-error","monohybrid","beginner",`${traitRule(t)} A student draws a Punnett square for ${t.A}${t.a} × ${t.a}${t.a} and lists the first parent's gametes as ${t.A}${t.a} and ${t.a}${t.a}.`,`What is the student's mistake?`,["Gametes should contain one allele, not a diploid genotype","The recessive parent cannot make gametes","The dominant allele must appear in every gamete","Punnett squares cannot be used for testcrosses"],"Gametes should contain one allele, not a diploid genotype","Each gamete receives only one allele from this locus.",`The ${t.A}${t.a} parent produces ${t.A} or ${t.a} gametes; the ${t.a}${t.a} parent produces only ${t.a} gametes.`);
-  });
-
-  add("monohybrid","beginner","mono-information",()=>{
-    const t=pick(traits);
-    return q("mono-information","monohybrid","beginner",`${traitRule(t)} An individual shows the dominant phenotype, ${t.dom}.`,`Which statement is justified from phenotype alone?`,["Its genotype could be homozygous dominant or heterozygous","Its genotype must be homozygous dominant","Its genotype must be heterozygous","It must carry two recessive alleles"],"Its genotype could be homozygous dominant or heterozygous","A dominant phenotype does not distinguish the two genotypes that contain a dominant allele.",`${t.A}${t.A} and ${t.A}${t.a} both show ${t.dom}; more information is needed.`);
-  });
-
-  add("monohybrid","intermediate","mono-testcross-design",()=>{
-    const t=pick(traits);
-    return q("mono-testcross-design","monohybrid","intermediate",`${traitRule(t)} An individual showing ${t.dom} could be ${t.A}${t.A} or ${t.A}${t.a}.`,`Which cross is most informative for determining its genotype?`,[`Cross it with ${t.a}${t.a}`,`Cross it with ${t.A}${t.A}`,`Cross it with another unknown dominant individual`,`Allow it to self only after selecting dominant offspring`],`Cross it with ${t.a}${t.a}`,"Use a partner that contributes only recessive alleles.",`A testcross with ${t.a}${t.a} reveals a hidden ${t.a} allele if recessive offspring appear.`);
-  });
-
-  add("monohybrid","intermediate","mono-sampling",()=>{
-    const t=pick(traits), n=pick([20,32,40,48]), rec=Math.round(n*pick([.19,.28,.31]));
-    return q("mono-sampling","monohybrid","intermediate",`${traitRule(t)} A cross ${t.A}${t.a} × ${t.A}${t.a} produces ${n-rec} offspring with ${t.dom} and ${rec} with ${t.rec}.`,`Which interpretation is most appropriate?`,["Sampling variation can cause observed counts to differ from the exact 3:1 expectation","The cross cannot be heterozygote × heterozygote because the counts are not exactly 3:1","Complete dominance predicts equal numbers of both phenotypes","Every family must reproduce the theoretical ratio exactly"],"Sampling variation can cause observed counts to differ from the exact 3:1 expectation","Expected ratios describe long-run probabilities, not guaranteed counts in every sample.",`A 3:1 ratio is an expectation. Random segregation produces sampling variation, especially in modest samples.`);
-  });
-
-  add("monohybrid","intermediate","mono-multiple-crosses",()=>{
-    const t=pick(traits);
-    return q("mono-multiple-crosses","monohybrid","intermediate",`${traitRule(t)} Individual 1 shows ${t.dom}. When crossed with an individual showing ${t.rec}, all 12 offspring show ${t.dom}. Individual 1 is then crossed with a second individual showing the dominant phenotype, and an offspring with ${t.rec} is produced.`,`What can be concluded with certainty?`,["Individual 1 and the second dominant parent both carry the recessive allele","Individual 1 must be homozygous dominant","The recessive offspring arose without receiving recessive alleles","The first recessive tester was heterozygous"],"Individual 1 and the second dominant parent both carry the recessive allele","A recessive offspring must receive a recessive allele from each parent.",`The recessive offspring proves that both dominant parents in the second cross are ${t.A}${t.a}. The first small family happened, by chance, to contain no recessive offspring.`);
-  });
-
-  add("monohybrid","intermediate","mono-conditional",()=>{
-    const t=pick(traits);
-    return q("mono-conditional","monohybrid","intermediate",`${traitRule(t)} Two heterozygous individuals are crossed: ${t.A}${t.a} × ${t.A}${t.a}. An offspring is known to show the dominant phenotype, ${t.dom}.`,`Given this phenotype, what is the probability that the offspring is heterozygous?`,["2/3","1/2","1/4","3/4"],"2/3","Condition on the offspring being dominant and remove the recessive genotype from consideration.",`Among dominant offspring, the possible genotypes are ${t.A}${t.A}, ${t.A}${t.a}, and ${t.A}${t.a}. Two of the three are heterozygous, so the probability is 2/3.`);
-  });
-
-  add("monohybrid","advanced","mono-uncertainty",()=>{
-    const t=pick(traits), n=pick([6,8,10,12]);
-    const chance=`${((0.5**n)*100).toFixed(n<10?2:3)}%`;
-    return q("mono-uncertainty","monohybrid","advanced",`${traitRule(t)} An individual showing ${t.dom} and having an unknown genotype is testcrossed with ${t.a}${t.a}. All ${n} offspring show ${t.dom}.`,`Which conclusion is scientifically strongest?`,[`${t.A}${t.A} is better supported, but ${t.A}${t.a} is not logically impossible`,`The unknown is proven to be ${t.A}${t.A}`,`The unknown is proven to be ${t.A}${t.a}`,"The offspring provide no evidence about genotype"],`${t.A}${t.A} is better supported, but ${t.A}${t.a} is not logically impossible`,`A heterozygote has a 1/2 chance of producing a dominant offspring in each testcross birth.`,`If the unknown were ${t.A}${t.a}, the chance of ${n} consecutive dominant offspring would be (1/2)^${n} = ${chance}. The result favors ${t.A}${t.A}, but a finite sample cannot prove it with absolute certainty.`);
-  });
-
-  add("monohybrid","advanced","mono-student-reasoning",()=>{
-    const t=pick(traits);
-    return q("mono-student-reasoning","monohybrid","advanced",`${traitRule(t)} A student says: “In ${t.A}${t.a} × ${t.A}${t.a}, each parent passes ${t.A} or ${t.a} with equal probability, so offspring phenotypes must be 1/2 ${t.dom} and 1/2 ${t.rec}.”`,`What is the key error?`,["The student did not combine the two independent parental allele contributions; three of four genotype outcomes show the dominant phenotype","A heterozygous parent passes only the dominant allele","Phenotypes are always in a 1:2:1 ratio under complete dominance","The recessive allele cannot enter a gamete"],"The student did not combine the two independent parental allele contributions; three of four genotype outcomes show the dominant phenotype","List all four combinations made by the two parental gametes.",`${t.A}${t.A}, ${t.A}${t.a}, ${t.A}${t.a}, and ${t.a}${t.a} occur in a 1:2:1 genotypic ratio. The first three show ${t.dom}, producing a 3:1 phenotypic ratio.`);
-  });
-
-  add("monohybrid","advanced","mono-hypotheses",()=>{
-    const t=pick(traits), n=pick([5,7,9]);
-    return q("mono-hypotheses","monohybrid","advanced",`${traitRule(t)} An unknown parent showing ${t.dom} is either ${t.A}${t.A} or ${t.A}${t.a}. A testcross with ${t.a}${t.a} produces ${n} offspring with ${t.dom} and none with ${t.rec}. Assume both candidate genotypes were initially equally plausible.`,`How should the two hypotheses be compared?`,[`${t.A}${t.A} is more strongly supported because it guarantees this result, but ${t.A}${t.a} cannot be completely ruled out`,`${t.A}${t.a} is more strongly supported because it makes two gamete types`,`Both hypotheses predict the result with equal probability`,`The result proves that dominance is incomplete`],`${t.A}${t.A} is more strongly supported because it guarantees this result, but ${t.A}${t.a} cannot be completely ruled out`,`Compare how probable the complete data are under each candidate genotype.`,`${t.A}${t.A} predicts all dominant offspring with probability 1. Under ${t.A}${t.a}, the probability is (1/2)^${n}. The data therefore favor ${t.A}${t.A}, without making the alternative impossible.`);
-  });
-
-  add("monohybrid","advanced","mono-penetrance",()=>{
-    const t=pick(traits), pen=pick([60,70,80,90]);
-    return q("mono-penetrance","monohybrid","advanced",`${traitRule(t)} The dominant phenotype has ${pen}% penetrance in individuals carrying ${t.A}. A cross ${t.A}${t.a} × ${t.a}${t.a} is performed.`,`What proportion of all offspring is expected to express the dominant phenotype?`,[`${pen/2}%`,`${pen}%`,`50%`,`${100-pen/2}%`],`${pen/2}%`,`First find the fraction inheriting ${t.A}, then multiply by penetrance.`,`One-half inherit ${t.A}; ${pen}% of those express the phenotype. 0.5 × ${pen/100} = ${pen/200}, or ${pen/2}% of all offspring.`);
-  });
-
-  add("monohybrid","advanced","mono-lethal",()=>{
-    return q("mono-lethal","monohybrid","advanced",`In mice, allele Y produces yellow fur in heterozygotes, but YY embryos die. Two living yellow mice are crossed: Yy × Yy.`,`What phenotypic ratio is expected among surviving offspring?`,["2 yellow : 1 non-yellow","3 yellow : 1 non-yellow","1 yellow : 1 non-yellow","All yellow"],"2 yellow : 1 non-yellow","Write the 1 YY : 2 Yy : 1 yy conception ratio, then remove the lethal class.",`YY dies, leaving 2 Yy yellow survivors for every 1 yy non-yellow survivor.`);
-  });
-
-  add("monohybrid","advanced","mono-sufficiency-advanced",()=>{
-    const t=pick(traits);
-    return q("mono-sufficiency-advanced","monohybrid","advanced",`${traitRule(t)} Two parents both show the dominant phenotype, ${t.dom}. Their first eight offspring also all show ${t.dom}.`,`Can the parental genotypes be uniquely determined from these observations?`,["No; several crosses remain possible, including at least one homozygous dominant parent or two heterozygotes that happened to produce no recessive offspring","Yes; both parents must be homozygous dominant","Yes; both parents must be heterozygous","No; dominant phenotypes never provide any genetic information"],"No; several crosses remain possible, including at least one homozygous dominant parent or two heterozygotes that happened to produce no recessive offspring","Distinguish what is favored by the data from what is logically proven.",`All-dominant offspring are guaranteed if either parent is ${t.A}${t.A}, but they can also occur by chance from ${t.A}${t.a} × ${t.A}${t.a}. The data do not identify a unique cross.`);
-  });
+  // MONOHYBRID is registered from topics/monohybrid.js
 
   // GAMETES
   add("gametes","beginner","gamete-count",()=>{
@@ -605,6 +481,10 @@ import { registerLinkageTopic } from "../topics/linkage.js";
     return bank.filter(g => (topic==="mixed" || g.topic===topic) && g.difficulty===difficulty);
   }
 
+    registerMonohybridTopic({
+      add, q, pick, shuffle, chooseOptions, fractionOptions,
+      traits, traitRule, rng: () => rng
+    });
     registerLinkageTopic({ add, q, pick, shuffle, chooseOptions, rng: () => rng });
 
 function chooseGenerator(){
