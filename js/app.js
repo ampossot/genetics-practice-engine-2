@@ -2,6 +2,7 @@ import { registerLinkageTopic } from "../topics/linkage.js";
 import { registerMonohybridTopic } from "../topics/monohybrid.js";
 import { registerGametesTopic } from "../topics/gametes.js";
 import { registerMeiosis5Topic } from "../topics/meiosis_5.js";
+import { registerMeiosis6Topic } from "../topics/meiosis_6.js";
 
 "use strict";
 
@@ -437,6 +438,10 @@ import { registerMeiosis5Topic } from "../topics/meiosis_5.js";
       traits, traitRule, rng: () => rng
     });
     registerMeiosis5Topic({
+      add, q, pick, shuffle, chooseOptions, fractionOptions,
+      traits, traitRule, rng: () => rng
+    });
+    registerMeiosis6Topic({
       add, q, pick, shuffle, chooseOptions, fractionOptions,
       traits, traitRule, rng: () => rng
     });
