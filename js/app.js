@@ -1,6 +1,7 @@
 import { registerLinkageTopic } from "../topics/linkage.js";
 import { registerMonohybridTopic } from "../topics/monohybrid.js";
 import { registerGametesTopic } from "../topics/gametes/index.js";
+import { registerDihybridTopic } from "../topics/dihybrid/index.js";
 
 "use strict";
 
@@ -233,39 +234,7 @@ import { registerGametesTopic } from "../topics/gametes/index.js";
     );
   });
 
-  // DIHYBRID
-  add("dihybrid","beginner","dihybrid-gametes",()=>q("dihybrid-gametes","dihybrid","beginner","The genes assort independently.","Which set lists all gametes from AaBb?",["AB, Ab, aB, ab","AA, Ab, bB, bb","AB and ab only","A, a, B, b"],"AB, Ab, aB, ab","Each gamete receives one allele from A/a and one from B/b.","The four combinations are AB, Ab, aB, and ab."));
-
-  add("dihybrid","beginner","dihybrid-ratio",()=>{
-    const c=pick([{ratio:"9:3:3:1",ans:"AaBb × AaBb"},{ratio:"1:1:1:1",ans:"AaBb × aabb"}]);
-    return q("dihybrid-ratio","dihybrid","beginner","Assume complete dominance and independent assortment.",`Which cross is classically associated with a ${c.ratio} phenotypic ratio?`,["AaBb × AaBb","AaBb × aabb","AABB × aabb","Aabb × aaBb"],c.ans,"Recognize standard dihybrid cross and testcross ratios.",`${c.ans} produces the expected ${c.ratio} ratio.`);
-  });
-
-  add("dihybrid","intermediate","dihybrid-product",()=>{
-    const c=pick([
-      {ask:"both recessive phenotypes",ans:"1/16",calc:"1/4 × 1/4"},
-      {ask:"both dominant phenotypes",ans:"9/16",calc:"3/4 × 3/4"},
-      {ask:"dominant at A and recessive at B",ans:"3/16",calc:"3/4 × 1/4"},
-      {ask:"heterozygous at both loci",ans:"1/4",calc:"1/2 × 1/2"},
-      {ask:"a dominant phenotype at exactly one of the two loci",ans:"6/16",calc:"3/16 + 3/16"}
-    ]);
-    return q("dihybrid-product","dihybrid","intermediate","Consider AaBb × AaBb; the genes assort independently.",`What is the probability of offspring with ${c.ask}?`,fractionOptions(c.ans),c.ans,"Solve each locus separately, then use the product or sum rule as appropriate.",`${c.calc} = ${c.ans}.`);
-  });
-
-  add("dihybrid","intermediate","dihybrid-counts",()=>{
-    const n=pick([160,320,640]), phenotype=pick([{name:"A_B_",p:9/16},{name:"A_bb",p:3/16},{name:"aaB_",p:3/16},{name:"aabb",p:1/16}]), ans=n*phenotype.p;
-    return q("dihybrid-counts","dihybrid","intermediate",`An AaBb × AaBb cross produces ${n} offspring. The loci assort independently and show complete dominance.`,`How many offspring are expected in phenotype class ${phenotype.name}?`,chooseOptions(ans,[n/16,n*3/16,n*9/16,n/4]),ans,"Use the 9:3:3:1 ratio.",`${phenotype.name} has expected frequency ${phenotype.p}; ${n} × ${phenotype.p} = ${ans}.`);
-  });
-
-  add("dihybrid","advanced","dihybrid-at-least",()=>{
-    const n=pick([2,3,4]), p=1/16, val=1-(1-p)**n, correct=`${(val*100).toFixed(1)}%`;
-    return q("dihybrid-at-least","dihybrid","advanced","For AaBb × AaBb, each offspring independently has probability 1/16 of being aabb.",`What is the probability that at least one of ${n} offspring is aabb?`,chooseOptions(correct,[`${((p**n)*100).toFixed(1)}%`,`${((1-p)**n*100).toFixed(1)}%`,`${(n*p*100).toFixed(1)}%`]),correct,"Use 1 − P(no aabb offspring).",`1 − (15/16)^${n} = ${correct}.`);
-  });
-
-  add("dihybrid","advanced","trihybrid-product",()=>{
-    const c=pick([{ask:"A_B_cc",ans:"9/64",calc:"3/4 × 3/4 × 1/4"},{ask:"aaBbC_",ans:"3/32",calc:"1/4 × 1/2 × 3/4"},{ask:"AaBbCc",ans:"1/8",calc:"1/2 × 1/2 × 1/2"}]);
-    return q("trihybrid-product","dihybrid","advanced","Consider AaBbCc × AaBbCc with independent assortment and complete dominance.",`What is the probability of ${c.ask}?`,fractionOptions(c.ans),c.ans,"Calculate each locus independently, then multiply.",`${c.calc} = ${c.ans}.`);
-  });
+  // DIHYBRID is registered from topics/dihybrid/index.js
 
   // NON-MENDELIAN
   add("nonmendelian","beginner","inheritance-pattern",()=>{
@@ -432,6 +401,10 @@ import { registerGametesTopic } from "../topics/gametes/index.js";
       traits, traitRule, rng: () => rng
     });
     registerGametesTopic({
+      add, q, pick, shuffle, chooseOptions, fractionOptions,
+      traits, traitRule, rng: () => rng
+    });
+    registerDihybridTopic({
       add, q, pick, shuffle, chooseOptions, fractionOptions,
       traits, traitRule, rng: () => rng
     });
