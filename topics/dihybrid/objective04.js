@@ -39,12 +39,6 @@ export function registerObjective04(ctx) {
 
   const unique = (items) => [...new Set(items)];
 
-  const gametesFrom = (genotypeA, genotypeB) => {
-    const first = unique(genotypeA.split(""));
-    const second = unique(genotypeB.split(""));
-
-    return first.flatMap((a) => second.map((b) => `${a}${b}`));
-  };
 
   const combineLocus = (first, second) => {
     if (first === second) return `${first}${second}`;
@@ -63,8 +57,6 @@ export function registerObjective04(ctx) {
       secondGamete[1]
     )}`;
 
-  const crossLabel = (p1A, p1B, p2A, p2B) =>
-    `${p1A}${p1B} × ${p2A}${p2B}`;
 
   // -------------------------------------------------------------------------
   // BEGINNER — identify correct gamete labels for a Punnett square

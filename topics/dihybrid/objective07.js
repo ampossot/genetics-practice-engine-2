@@ -31,11 +31,11 @@ export function registerObjective07(ctx) {
   ];
 
   const organisms = [
-    "pea plants",
-    "fruit flies",
-    "corn plants",
-    "laboratory mice",
-    "beetles"
+    "pea plant",
+    "fruit fly",
+    "corn plant",
+    "laboratory mouse",
+    "beetle"
   ];
 
   // -------------------------------------------------------------------------
@@ -55,7 +55,7 @@ export function registerObjective07(ctx) {
       const scenarios = [
         {
           unknown:
-            `an ${organism.slice(0, -1)} showing dominant phenotypes at both loci`,
+            `an individual (${organism}) showing dominant phenotypes at both loci`,
           goal:
             `determine whether it is heterozygous at either locus`,
           correct: `${a}${a}${b}${b}`,

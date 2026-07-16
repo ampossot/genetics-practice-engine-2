@@ -2,19 +2,20 @@
  * Dihybrid Crosses — Objective 10
  *
  * Learning objective:
- * Use testcrosses to determine unknown parental genotypes and evaluate
- * the strength of testcross evidence.
+ * Interpret diagnostic testcross patterns, distinguish complete from partial
+ * heterozygosity, and evaluate the limits of finite testcross evidence.
  *
  * Design:
  * One beginner family, one intermediate family, and two advanced families.
- * Each family contains multiple randomized biological scenarios.
+ * This objective focuses on testcross-specific mastery rather than general
+ * parental inference or experimental-design selection.
  */
 
 export function registerObjective10(ctx) {
   const { add, q, pick, shuffle } = ctx;
 
   const OBJECTIVE =
-    "using testcrosses to determine unknown dihybrid genotypes";
+    "interpreting diagnostic patterns and limitations in dihybrid testcrosses";
 
   const register = (difficulty, id, task, build) =>
     add("dihybrid", difficulty, id, build, {
@@ -30,111 +31,81 @@ export function registerObjective10(ctx) {
     ["R", "T"]
   ];
 
-  const organisms = [
-    "pea plant",
-    "fruit fly",
-    "corn plant",
-    "laboratory mouse",
-    "beetle"
-  ];
-
   // -------------------------------------------------------------------------
-  // BEGINNER — select the most informative tester
+  // BEGINNER — predict the class structure of a specified testcross
   // -------------------------------------------------------------------------
 
   register(
     "beginner",
-    "dh10-choose-tester",
-    "tester selection",
+    "dh10-predict-testcross-classes",
+    "testcross class prediction",
     () => {
-      const organism = pick(organisms);
       const [A, B] = pick(allelePairs);
       const a = A.toLowerCase();
       const b = B.toLowerCase();
 
       const scenarios = [
         {
-          unknown:
-            `a ${organism} showing dominant phenotypes at both loci (${A}_${B}_)`,
-          goal:
-            "determine whether it is homozygous or heterozygous at either locus",
-          correct: `${a}${a}${b}${b}`,
-          distractors: [
-            `${A}${A}${B}${B}`,
-            `${A}${a}${B}${b}`,
-            `${A}${A}${b}${b}`
-          ],
-          explanation:
-            `The ${a}${a}${b}${b} tester contributes only recessive alleles, so every offspring phenotype reveals the alleles contributed by the unknown parent.`
+          unknown: `${A}${a}${B}${b}`,
+          result:
+            `four classes: ${A}_${B}_, ${A}_${b}${b}, ${a}${a}${B}_, and ${a}${a}${b}${b}`,
+          ratio: "1:1:1:1"
         },
         {
-          unknown:
-            `a ${organism} with phenotype ${A}_${b}${b}`,
-          goal:
-            `distinguish ${A}${A}${b}${b} from ${A}${a}${b}${b}`,
-          correct: `${a}${a}${b}${b}`,
-          distractors: [
-            `${A}${A}${b}${b}`,
-            `${A}${a}${B}${b}`,
-            `${A}${A}${B}${B}`
-          ],
-          explanation:
-            `The uncertain locus is ${A}/${a}. A tester that is ${a}${a} makes any recessive allele contributed by the unknown parent visible.`
+          unknown: `${A}${A}${B}${b}`,
+          result:
+            `two classes: ${A}_${B}_ and ${A}_${b}${b}`,
+          ratio: "1:1"
         },
         {
-          unknown:
-            `a ${organism} with phenotype ${a}${a}${B}_`,
-          goal:
-            `distinguish ${a}${a}${B}${B} from ${a}${a}${B}${b}`,
-          correct: `${a}${a}${b}${b}`,
-          distractors: [
-            `${a}${a}${B}${B}`,
-            `${A}${a}${B}${b}`,
-            `${A}${A}${B}${B}`
-          ],
-          explanation:
-            `The uncertain locus is ${B}/${b}. The ${b}${b} tester exposes whether the unknown parent contributes ${b}.`
+          unknown: `${A}${a}${B}${B}`,
+          result:
+            `two classes: ${A}_${B}_ and ${a}${a}${B}_`,
+          ratio: "1:1"
         },
         {
-          unknown:
-            `a ${organism} showing dominant phenotypes at both loci`,
-          goal:
-            "make each offspring phenotype correspond directly to one gamete from the unknown parent",
-          correct: `${a}${a}${b}${b}`,
-          distractors: [
-            `${A}${A}${B}${B}`,
-            `${A}${a}${B}${b}`,
-            `${A}${A}${B}${b}`
-          ],
-          explanation:
-            `With a double-recessive tester, the tester's contribution is fixed, so offspring classes directly reveal the unknown parent's gametes.`
+          unknown: `${A}${A}${B}${B}`,
+          result:
+            `one class: ${A}_${B}_`,
+          ratio: "all offspring in one class"
+        },
+        {
+          unknown: `${A}${a}${b}${b}`,
+          result:
+            `two classes: ${A}_${b}${b} and ${a}${a}${b}${b}`,
+          ratio: "1:1"
         }
       ];
 
       const item = pick(scenarios);
 
       return q(
-        "dh10-choose-tester",
+        "dh10-predict-testcross-classes",
         "dihybrid",
         "beginner",
-        `A researcher has ${item.unknown} and wants to ${item.goal}.`,
-        "Which tester genotype is most informative?",
-        shuffle([item.correct, ...item.distractors]),
-        item.correct,
-        "Choose a tester that contributes only recessive alleles at every locus being investigated.",
-        `${item.explanation} Therefore, ${item.correct} is the most informative tester. Key takeaway: a testcross uses homozygous recessive testers to reveal hidden parental alleles.`
+        `An individual with genotype ${item.unknown} is crossed with the double-recessive tester ${a}${a}${b}${b}.`,
+        "Which offspring pattern is expected?",
+        shuffle([
+          `${item.result}, in a ${item.ratio} pattern`,
+          "four classes in a 9:3:3:1 ratio",
+          `only ${a}${a}${b}${b} offspring`,
+          "two classes in a 3:1 ratio"
+        ]),
+        `${item.result}, in a ${item.ratio} pattern`,
+        "Each testcross offspring class corresponds directly to one gamete from the unknown parent.",
+        `${item.unknown} produces the gametes represented by ${item.result}; therefore, the expected pattern is ${item.ratio}. Key takeaway: the number and frequency of testcross classes mirror the gametes produced by the unknown parent.`
       );
     }
   );
 
   // -------------------------------------------------------------------------
-  // INTERMEDIATE — infer the unknown genotype from testcross results
+  // INTERMEDIATE — distinguish complete from partial heterozygosity
   // -------------------------------------------------------------------------
 
   register(
     "intermediate",
-    "dh10-interpret-results",
-    "testcross interpretation",
+    "dh10-partial-heterozygosity",
+    "partial heterozygosity diagnosis",
     () => {
       const [A, B] = pick(allelePairs);
       const a = A.toLowerCase();
@@ -142,245 +113,208 @@ export function registerObjective10(ctx) {
 
       const scenarios = [
         {
-          result:
-            `four phenotype classes occur in an approximately 1:1:1:1 ratio`,
-          correct: `${A}${a}${B}${b}`,
-          options: [
-            `${A}${a}${B}${b}`,
-            `${A}${A}${B}${B}`,
-            `${A}${A}${B}${b}`,
-            `${A}${a}${B}${B}`
-          ],
-          explanation:
-            `Four equally frequent classes require the unknown parent to produce ${A}${B}, ${A}${b}, ${a}${B}, and ${a}${b} gametes.`
-        },
-        {
-          result:
-            `half the offspring are ${A}_${B}_ and half are ${A}_${b}${b}; no ${a}${a} offspring occur`,
+          classes:
+            `${A}_${B}_ and ${A}_${b}${b} in equal numbers`,
           correct: `${A}${A}${B}${b}`,
-          options: [
-            `${A}${A}${B}${b}`,
-            `${A}${a}${B}${b}`,
-            `${A}${A}${B}${B}`,
-            `${A}${a}${b}${b}`
-          ],
           explanation:
             `The unknown parent always contributes ${A}, but contributes either ${B} or ${b}.`
         },
         {
-          result:
-            `half the offspring are ${A}_${B}_ and half are ${a}${a}${B}_; no ${b}${b} offspring occur`,
+          classes:
+            `${A}_${B}_ and ${a}${a}${B}_ in equal numbers`,
           correct: `${A}${a}${B}${B}`,
-          options: [
-            `${A}${a}${B}${B}`,
-            `${A}${a}${B}${b}`,
-            `${A}${A}${B}${B}`,
-            `${a}${a}${B}${b}`
-          ],
           explanation:
             `The unknown parent contributes either ${A} or ${a}, but always contributes ${B}.`
         },
         {
-          result:
-            `all offspring show dominant phenotypes at both loci`,
-          correct: `${A}${A}${B}${B}`,
-          options: [
-            `${A}${A}${B}${B}`,
-            `${A}${a}${B}${b}`,
-            `${A}${A}${B}${b}`,
-            `${A}${a}${B}${B}`
-          ],
+          classes:
+            `${A}_${b}${b} and ${a}${a}${b}${b} in equal numbers`,
+          correct: `${A}${a}${b}${b}`,
           explanation:
-            `Against ${a}${a}${b}${b}, all double-dominant offspring require the unknown parent to contribute ${A} and ${B} every time.`
+            `The unknown parent segregates at the first locus and is homozygous recessive at the second.`
         },
         {
-          result:
-            `half the offspring are ${A}_${b}${b} and half are ${a}${a}${b}${b}`,
-          correct: `${A}${a}${b}${b}`,
-          options: [
-            `${A}${a}${b}${b}`,
-            `${A}${A}${B}${b}`,
-            `${A}${a}${B}${b}`,
-            `${a}${a}${B}${b}`
-          ],
+          classes:
+            `${a}${a}${B}_ and ${a}${a}${b}${b} in equal numbers`,
+          correct: `${a}${a}${B}${b}`,
           explanation:
-            `The unknown parent segregates ${A}/${a} but can contribute only ${b} at the second locus.`
+            `The unknown parent is homozygous recessive at the first locus and segregates at the second.`
+        },
+        {
+          classes:
+            `all four phenotype classes in approximately equal numbers`,
+          correct: `${A}${a}${B}${b}`,
+          explanation:
+            `Four equal classes require heterozygosity at both loci.`
         }
       ];
 
       const item = pick(scenarios);
 
       return q(
-        "dh10-interpret-results",
+        "dh10-partial-heterozygosity",
         "dihybrid",
         "intermediate",
-        `An unknown parent is crossed with ${a}${a}${b}${b}. In a large sample, ${item.result}. Assume complete dominance and independent assortment.`,
-        "What is the genotype of the unknown parent?",
-        shuffle(item.options),
-        item.correct,
-        "Use the number and identity of offspring classes to infer which gametes the unknown parent produced.",
-        `${item.explanation} Therefore, the unknown parent is ${item.correct}. Key takeaway: testcross offspring classes directly reveal the gametes of the unknown parent.`
-      );
-    }
-  );
-
-  // -------------------------------------------------------------------------
-  // ADVANCED — identify the most informative observation
-  // -------------------------------------------------------------------------
-
-  register(
-    "advanced",
-    "dh10-best-evidence",
-    "evidence evaluation",
-    () => {
-      const [A, B] = pick(allelePairs);
-      const a = A.toLowerCase();
-      const b = B.toLowerCase();
-
-      const scenarios = [
-        {
-          hypotheses:
-            `${A}${A}${B}${B} versus ${A}${a}${B}${b}`,
-          correct:
-            `Observation of any ${a}${a} or ${b}${b} offspring`,
-          distractors: [
-            `Observation of one ${A}_${B}_ offspring`,
-            "Observation that fertilization occurred",
-            "Observation of equal numbers of male and female offspring"
-          ],
-          explanation:
-            `The homozygous dominant hypothesis cannot produce recessive offspring, whereas the double heterozygote can.`
-        },
-        {
-          hypotheses:
-            `${A}${A}${B}${b} versus ${A}${a}${B}${b}`,
-          correct:
-            `Observation of an ${a}${a} offspring`,
-          distractors: [
-            `Observation of a ${b}${b} offspring`,
-            `Observation of an ${A}_${B}_ offspring`,
-            "Observation of a dominant phenotype at the second locus"
-          ],
-          explanation:
-            `Both candidates carry ${b}, but only ${A}${a}${B}${b} can produce ${a}${a}.`
-        },
-        {
-          hypotheses:
-            `${A}${a}${B}${B} versus ${A}${a}${B}${b}`,
-          correct:
-            `Observation of a ${b}${b} offspring`,
-          distractors: [
-            `Observation of an ${a}${a} offspring`,
-            `Observation of an ${A}_${B}_ offspring`,
-            "Observation of a dominant phenotype at the first locus"
-          ],
-          explanation:
-            `Both candidates carry ${a}, but only ${A}${a}${B}${b} can produce ${b}${b}.`
-        },
-        {
-          hypotheses:
-            `${A}${A}${B}${B} versus ${A}${A}${B}${b}`,
-          correct:
-            `Observation of a ${b}${b} offspring`,
-          distractors: [
-            `Observation of an ${A}_${B}_ offspring`,
-            `Observation of an ${a}${a} offspring`,
-            "Observation of equal offspring numbers in two families"
-          ],
-          explanation:
-            `Only the heterozygous second-locus hypothesis can contribute ${b}.`
-        }
-      ];
-
-      const item = pick(scenarios);
-
-      return q(
-        "dh10-best-evidence",
-        "dihybrid",
-        "advanced",
-        `An unknown dominant-phenotype parent is testcrossed with ${a}${a}${b}${b}. The competing genotype hypotheses are ${item.hypotheses}.`,
-        "Which observation would most clearly distinguish the two hypotheses?",
-        shuffle([item.correct, ...item.distractors]),
-        item.correct,
-        "Look for an offspring phenotype that one hypothesis can produce and the other cannot.",
-        `${item.explanation} Therefore, ${item.correct.toLowerCase()} provides the strongest evidence. Key takeaway: the most informative testcross outcome is often one that falsifies a competing genotype hypothesis.`
-      );
-    }
-  );
-
-  // -------------------------------------------------------------------------
-  // ADVANCED — critique weak or incomplete testcross designs
-  // -------------------------------------------------------------------------
-
-  register(
-    "advanced",
-    "dh10-design-critique",
-    "experimental design critique",
-    () => {
-      const [A, B] = pick(allelePairs);
-      const a = A.toLowerCase();
-      const b = B.toLowerCase();
-
-      const scenarios = [
-        {
-          proposal:
-            `A student crosses an unknown ${A}_${B}_ individual with ${A}${A}${B}${B}.`,
-          correct:
-            "The dominant tester masks recessive alleles carried by the unknown parent",
-          explanation:
-            `A ${a}${a}${b}${b} tester would reveal the unknown parent's gametes.`
-        },
-        {
-          proposal:
-            "A student examines one offspring from a correctly designed dihybrid testcross and declares the unknown parent homozygous at both loci.",
-          correct:
-            "One offspring is insufficient to exclude heterozygosity",
-          explanation:
-            "A heterozygous parent can produce a dominant offspring by chance; a larger sample is required."
-        },
-        {
-          proposal:
-            "A student records only whether offspring are dominant at both loci and discards the other phenotype categories.",
-          correct:
-            "Discarding classes removes information needed to infer the unknown genotype",
-          explanation:
-            "All phenotype classes are informative because each corresponds to a gamete from the unknown parent."
-        },
-        {
-          proposal:
-            `A student observes no ${a}${a}${b}${b} offspring among four progeny and concludes that the parent cannot be ${A}${a}${B}${b}.`,
-          correct:
-            "A small sample can fail to contain a possible class by chance",
-          explanation:
-            "Absence of a class in four offspring is not enough to prove that the corresponding gamete cannot be produced."
-        },
-        {
-          proposal:
-            "A student testcrosses two unknown dominant-phenotype individuals with each other.",
-          correct:
-            "Because both parental genotypes are uncertain, allele contributions cannot be assigned clearly",
-          explanation:
-            `Using a known ${a}${a}${b}${b} tester isolates the gametes produced by the unknown parent.`
-        }
-      ];
-
-      const item = pick(scenarios);
-
-      return q(
-        "dh10-design-critique",
-        "dihybrid",
-        "advanced",
-        item.proposal,
-        "What is the main weakness in the student's testcross reasoning or design?",
+        `An unknown parent is testcrossed with ${a}${a}${b}${b}. A large sample contains ${item.classes}.`,
+        "Which unknown-parent genotype is most consistent with the testcross?",
         shuffle([
           item.correct,
-          "The design assumes independent assortment",
-          "The design requires crossing over",
-          "The design includes too many genes"
+          `${A}${A}${B}${B}`,
+          `${A}${a}${B}${b}`,
+          `${a}${a}${b}${b}`
+        ].filter((value, index, array) => array.indexOf(value) === index)),
+        item.correct,
+        "Determine which loci segregate into two classes and which loci remain fixed.",
+        `${item.explanation} Therefore, the unknown genotype is ${item.correct}. Key takeaway: two testcross classes usually reveal heterozygosity at one locus, whereas four classes reveal heterozygosity at both.`
+      );
+    }
+  );
+
+  // -------------------------------------------------------------------------
+  // ADVANCED — identify diagnostic classes that falsify a genotype hypothesis
+  // -------------------------------------------------------------------------
+
+  register(
+    "advanced",
+    "dh10-falsifying-class",
+    "testcross falsification reasoning",
+    () => {
+      const [A, B] = pick(allelePairs);
+      const a = A.toLowerCase();
+      const b = B.toLowerCase();
+
+      const scenarios = [
+        {
+          hypothesis: `${A}${A}${B}${B}`,
+          diagnostic:
+            `any offspring with ${a}${a} or ${b}${b}`,
+          explanation:
+            `A homozygous dominant parent cannot contribute ${a} or ${b}.`
+        },
+        {
+          hypothesis: `${A}${A}${B}${b}`,
+          diagnostic:
+            `any ${a}${a} offspring`,
+          explanation:
+            `The proposed parent cannot contribute ${a}, although it can contribute ${b}.`
+        },
+        {
+          hypothesis: `${A}${a}${B}${B}`,
+          diagnostic:
+            `any ${b}${b} offspring`,
+          explanation:
+            `The proposed parent cannot contribute ${b}.`
+        },
+        {
+          hypothesis: `${A}${A}${b}${b}`,
+          diagnostic:
+            `any ${a}${a} offspring`,
+          explanation:
+            `The proposed parent can produce only ${A}${b} gametes.`
+        },
+        {
+          hypothesis: `${a}${a}${B}${B}`,
+          diagnostic:
+            `any ${b}${b} offspring`,
+          explanation:
+            `The proposed parent can produce only ${a}${B} gametes.`
+        }
+      ];
+
+      const item = pick(scenarios);
+
+      return q(
+        "dh10-falsifying-class",
+        "dihybrid",
+        "advanced",
+        `An unknown parent is testcrossed with ${a}${a}${b}${b}. The working hypothesis is that the unknown genotype is ${item.hypothesis}.`,
+        "Which observation would immediately falsify that hypothesis?",
+        shuffle([
+          item.diagnostic,
+          `an ${A}_${B}_ offspring`,
+          "successful fertilization",
+          "approximately equal numbers of males and females"
+        ]),
+        item.diagnostic,
+        "Find an offspring class that requires an allele the proposed genotype cannot contribute.",
+        `${item.explanation} Therefore, ${item.diagnostic} would falsify the hypothesis. Key takeaway: a single impossible-under-the-hypothesis class can be more decisive than many compatible offspring.`
+      );
+    }
+  );
+
+  // -------------------------------------------------------------------------
+  // ADVANCED — evaluate finite-sample limits in testcrosses
+  // -------------------------------------------------------------------------
+
+  register(
+    "advanced",
+    "dh10-finite-sample-limits",
+    "testcross evidence limitation",
+    () => {
+      const [A, B] = pick(allelePairs);
+      const a = A.toLowerCase();
+      const b = B.toLowerCase();
+
+      const scenarios = [
+        {
+          evidence:
+            `four testcross offspring are all ${A}_${B}_`,
+          correct:
+            "The result supports homozygosity but does not exclude heterozygosity",
+          explanation:
+            `A heterozygous parent can produce four ${A}${B} gametes in succession by chance.`
+        },
+        {
+          evidence:
+            `one testcross offspring is ${a}${a}${b}${b}`,
+          correct:
+            `The unknown parent is proven to carry both ${a} and ${b}`,
+          explanation:
+            `The tester supplies one recessive allele at each locus, so the unknown parent supplied the other two.`
+        },
+        {
+          evidence:
+            `twenty testcross offspring are all ${A}_${B}_`,
+          correct:
+            `The evidence strongly supports ${A}${A}${B}${B}, but it is still probabilistic rather than absolute proof`,
+          explanation:
+            `Missing all alternative classes becomes unlikely under heterozygosity, but finite samples cannot create logical certainty from absence alone.`
+        },
+        {
+          evidence:
+            `two classes are observed among six offspring`,
+          correct:
+            "The data may suggest heterozygosity at one locus, but a larger sample is needed to exclude missing classes",
+          explanation:
+            `A double heterozygote can fail to display all four classes in a small sample.`
+        },
+        {
+          evidence:
+            `all four classes appear among five offspring`,
+          correct:
+            `The unknown parent is proven to be heterozygous at both loci`,
+          explanation:
+            `Producing all four tester-revealed classes requires all four gamete types.`
+        }
+      ];
+
+      const item = pick(scenarios);
+
+      return q(
+        "dh10-finite-sample-limits",
+        "dihybrid",
+        "advanced",
+        `A dihybrid testcross yields the following evidence: ${item.evidence}.`,
+        "Which conclusion best respects the strength and limits of the evidence?",
+        shuffle([
+          item.correct,
+          "The observed sample proves every unobserved class is impossible",
+          "Testcross results cannot reveal parental genotype",
+          "Dominant alleles are transmitted more frequently"
         ]),
         item.correct,
-        "Check the tester genotype, the number of offspring, and whether all informative classes were recorded.",
-        `${item.explanation} Key takeaway: a strong testcross uses a known recessive tester, records every relevant offspring class, and avoids conclusions unsupported by sample size.`
+        "Observed diagnostic classes can prove allele presence; missing classes in finite samples usually provide only probabilistic evidence.",
+        `${item.explanation} Key takeaway: presence can be logically decisive, whereas absence must be interpreted in light of sample size.`
       );
     }
   );

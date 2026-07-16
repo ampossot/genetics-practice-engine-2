@@ -38,10 +38,6 @@ export function registerObjective08(ctx) {
     "beetles"
   ];
 
-  const expectedCounts = (total, ratio) => {
-    const sum = ratio.reduce((acc, value) => acc + value, 0);
-    return ratio.map((value) => (total * value) / sum);
-  };
 
   // -------------------------------------------------------------------------
   // BEGINNER — match a dataset to the expected ratio

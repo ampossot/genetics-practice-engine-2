@@ -62,58 +62,6 @@ export function registerObjective02(ctx) {
       "1"
     ]);
 
-  const locusCases = (upper) => {
-    const lower = upper.toLowerCase();
-
-    return {
-      heterozygoteCross: {
-        cross: `${upper}${lower} × ${upper}${lower}`,
-        genotype: {
-          [`${upper}${upper}`]: { numerator: 1, denominator: 4 },
-          [`${upper}${lower}`]: { numerator: 1, denominator: 2 },
-          [`${lower}${lower}`]: { numerator: 1, denominator: 4 }
-        },
-        phenotype: {
-          dominant: { numerator: 3, denominator: 4 },
-          recessive: { numerator: 1, denominator: 4 }
-        }
-      },
-      testcross: {
-        cross: `${upper}${lower} × ${lower}${lower}`,
-        genotype: {
-          [`${upper}${lower}`]: { numerator: 1, denominator: 2 },
-          [`${lower}${lower}`]: { numerator: 1, denominator: 2 }
-        },
-        phenotype: {
-          dominant: { numerator: 1, denominator: 2 },
-          recessive: { numerator: 1, denominator: 2 }
-        }
-      },
-      homozygousDominantCross: {
-        cross: `${upper}${upper} × ${upper}${lower}`,
-        genotype: {
-          [`${upper}${upper}`]: { numerator: 1, denominator: 2 },
-          [`${upper}${lower}`]: { numerator: 1, denominator: 2 }
-        },
-        phenotype: {
-          dominant: { numerator: 1, denominator: 1 },
-          recessive: { numerator: 0, denominator: 1 }
-        }
-      }
-    };
-  };
-
-  const formatPhenotype = (A, B, firstState, secondState) => {
-    const aPart =
-      firstState === "dominant"
-        ? `${A}_`
-        : `${A.toLowerCase()}${A.toLowerCase()}`;
-    const bPart =
-      secondState === "dominant"
-        ? `${B}_`
-        : `${B.toLowerCase()}${B.toLowerCase()}`;
-    return `${aPart}${bPart}`;
-  };
 
   // -------------------------------------------------------------------------
   // BEGINNER — direct probability from several cross structures
