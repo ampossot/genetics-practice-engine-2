@@ -11,6 +11,7 @@ import { registerObjective03 } from "./objective03.js";
 import { registerObjective04 } from "./objective04.js";
 import { registerObjective05 } from "./objective05.js";
 import { registerObjective06 } from "./objective06.js";
+import { registerObjective07 } from "./objective07.js";
 
 export function registerDihybridTopic(ctx) {
   registerObjective01(ctx);
@@ -19,4 +20,5 @@ export function registerDihybridTopic(ctx) {
   registerObjective04(ctx);
   registerObjective05(ctx);
   registerObjective06(ctx);
+  registerObjective07(ctx);
 }
