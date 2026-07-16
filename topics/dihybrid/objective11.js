@@ -2,19 +2,20 @@
  * Dihybrid Crosses — Objective 11
  *
  * Learning objective:
- * Infer hidden heterozygosity from offspring evidence and evaluate when
- * observations are sufficient to exclude homozygous parental genotypes.
+ * Infer hidden heterozygosity from ordinary family-cross evidence and evaluate
+ * when offspring observations are sufficient to support or prove parental
+ * genotypes.
  *
  * Design:
  * One beginner family, one intermediate family, and two advanced families.
- * Each family contains multiple randomized biological scenarios.
+ * Testcross-specific reasoning is reserved for Objective 10.
  */
 
 export function registerObjective11(ctx) {
   const { add, q, pick, shuffle } = ctx;
 
   const OBJECTIVE =
-    "inferring hidden heterozygosity from dihybrid offspring evidence";
+    "inferring hidden heterozygosity from ordinary dihybrid family crosses";
 
   const register = (difficulty, id, task, build) =>
     add("dihybrid", difficulty, id, build, {
@@ -39,7 +40,7 @@ export function registerObjective11(ctx) {
   ];
 
   // -------------------------------------------------------------------------
-  // BEGINNER — identify evidence that proves a recessive allele is carried
+  // BEGINNER — recognize hidden recessive alleles from offspring phenotypes
   // -------------------------------------------------------------------------
 
   register(
@@ -54,52 +55,53 @@ export function registerObjective11(ctx) {
 
       const scenarios = [
         {
-          parentPhenotype: `${A}_${B}_`,
-          evidence: `an offspring with phenotype ${a}${a}${B}_`,
-          correct: `The parent must carry allele ${a}`,
+          parents: `two ${organism}s with phenotype ${A}_${B}_`,
+          offspring: `${a}${a}${B}_`,
+          correct: `Both parents must carry ${a}`,
           distractors: [
-            `The parent must be ${A}${A}`,
-            `The parent cannot carry ${a}`,
-            `The offspring phenotype gives no information about the parent`
+            `Only one parent must carry ${a}`,
+            `Both parents must be ${A}${A}`,
+            `The offspring phenotype gives no information about the parents`
           ],
           explanation:
-            `An ${a}${a} offspring must receive ${a} from both parents, so any dominant-phenotype parent that produced it must carry ${a}.`
+            `An ${a}${a} offspring must receive one ${a} allele from each parent.`
         },
         {
-          parentPhenotype: `${A}_${B}_`,
-          evidence: `an offspring with phenotype ${A}_${b}${b}`,
-          correct: `The parent must carry allele ${b}`,
+          parents: `two ${organism}s with phenotype ${A}_${B}_`,
+          offspring: `${A}_${b}${b}`,
+          correct: `Both parents must carry ${b}`,
           distractors: [
-            `The parent must be ${B}${B}`,
-            `The parent cannot carry ${b}`,
+            `Only one parent must carry ${b}`,
+            `Both parents must be ${B}${B}`,
             `Dominance creates ${b} alleles in the offspring`
           ],
           explanation:
-            `A ${b}${b} offspring requires a ${b} allele from each parent.`
+            `A ${b}${b} offspring must receive one ${b} allele from each parent.`
         },
         {
-          parentPhenotype: `${A}_${B}_`,
-          evidence: `an offspring with phenotype ${a}${a}${b}${b}`,
-          correct: `The parent must carry both ${a} and ${b}`,
+          parents: `two ${organism}s with phenotype ${A}_${B}_`,
+          offspring: `${a}${a}${b}${b}`,
+          correct: `Both parents must carry both ${a} and ${b}`,
           distractors: [
-            `The parent must be homozygous dominant at both loci`,
-            `Only one recessive allele must be carried`,
-            `The offspring phenotype is unrelated to parental genotype`
+            `Only one parent must carry both recessive alleles`,
+            `Both parents must be homozygous dominant`,
+            `The double-recessive offspring could arise without parental recessive alleles`
           ],
           explanation:
-            `A double-recessive offspring requires both parents to contribute ${a} and ${b}.`
+            `The double-recessive offspring receives ${a} and ${b} from each parent.`
         },
         {
-          parentPhenotype: `${A}_${b}${b}`,
-          evidence: `an offspring with phenotype ${a}${a}${b}${b}`,
-          correct: `The parent must be ${A}${a}${b}${b}`,
+          parents: `one ${organism} with phenotype ${A}_${b}${b} and one with phenotype ${a}${a}${B}_`,
+          offspring: `${a}${a}${b}${b}`,
+          correct:
+            `The first parent must carry ${a}, and the second parent must carry ${b}`,
           distractors: [
-            `The parent must be ${A}${A}${b}${b}`,
-            `The parent must be ${a}${a}${B}${B}`,
-            `The parent could be any dominant genotype`
+            `Only the first parent must carry a hidden recessive allele`,
+            `Only the second parent must carry a hidden recessive allele`,
+            `Neither parent needs to carry a hidden recessive allele`
           ],
           explanation:
-            `The parent already shows ${b}${b}; producing ${a}${a} offspring proves it also carries ${a}.`
+            `The first parent already contributes ${b}; it must also contribute ${a}. The second already contributes ${a}; it must also contribute ${b}.`
         }
       ];
 
@@ -109,18 +111,18 @@ export function registerObjective11(ctx) {
         "dh11-hidden-allele-evidence",
         "dihybrid",
         "beginner",
-        `A ${organism} has phenotype ${item.parentPhenotype} and produces ${item.evidence}.`,
+        `${item.parents} produce an offspring with phenotype ${item.offspring}.`,
         "What conclusion is justified?",
         shuffle([item.correct, ...item.distractors]),
         item.correct,
-        "A recessive offspring phenotype can appear only if the required recessive allele was transmitted by each parent.",
-        `${item.explanation} Therefore, ${item.correct.toLowerCase()}. Key takeaway: recessive offspring can reveal alleles hidden by dominant parental phenotypes.`
+        "Trace each recessive allele in the offspring back to one allele from each parent.",
+        `${item.explanation} Therefore, ${item.correct.toLowerCase()}. Key takeaway: recessive offspring phenotypes can expose alleles hidden by dominant parental phenotypes.`
       );
     }
   );
 
   // -------------------------------------------------------------------------
-  // INTERMEDIATE — infer whether heterozygosity is proven at one or both loci
+  // INTERMEDIATE — infer parental genotypes locus by locus
   // -------------------------------------------------------------------------
 
   register(
@@ -134,64 +136,56 @@ export function registerObjective11(ctx) {
 
       const scenarios = [
         {
-          parents:
-            `two individuals with phenotype ${A}_${B}_`,
-          offspring:
-            `at least one ${a}${a}${B}_ offspring, but no ${b}${b} offspring have been observed`,
+          evidence:
+            `Two ${A}_${B}_ parents produce at least one ${a}${a}${B}_ offspring, but no ${b}${b} offspring have been observed.`,
           correct:
-            `Both parents are heterozygous at the ${A}/${a} locus; their ${B}/${b} genotypes remain uncertain`,
+            `Both parents are ${A}${a} at the first locus; their ${B}/${b} genotypes remain uncertain`,
           distractors: [
-            `Both parents are ${A}${a}${B}${b}`,
-            `Both parents are homozygous dominant at both loci`,
-            `Only one parent must carry ${a}`
+            `Both parents must be ${A}${a}${B}${b}`,
+            `Both parents must be ${A}${A}${B}${B}`,
+            `Only one parent needs to carry ${a}`
           ],
           explanation:
-            `The ${a}${a} offspring proves that both parents carry ${a}. Absence of ${b}${b} offspring does not prove homozygosity at the second locus.`
+            `The ${a}${a} offspring proves both parents carry ${a}, but the second-locus evidence is incomplete.`
         },
         {
-          parents:
-            `two individuals with phenotype ${A}_${B}_`,
-          offspring:
-            `at least one ${A}_${b}${b} offspring, but no ${a}${a} offspring have been observed`,
+          evidence:
+            `Two ${A}_${B}_ parents produce at least one ${A}_${b}${b} offspring, but no ${a}${a} offspring have been observed.`,
           correct:
-            `Both parents are heterozygous at the ${B}/${b} locus; their ${A}/${a} genotypes remain uncertain`,
+            `Both parents are ${B}${b} at the second locus; their ${A}/${a} genotypes remain uncertain`,
           distractors: [
-            `Both parents are ${A}${a}${B}${b}`,
-            `Both parents are ${A}${A}${B}${B}`,
-            `Only one parent must carry ${b}`
+            `Both parents must be ${A}${a}${B}${b}`,
+            `Both parents must be ${A}${A}${B}${B}`,
+            `Only one parent needs to carry ${b}`
           ],
           explanation:
-            `The ${b}${b} offspring proves that both parents carry ${b}; the first-locus genotypes are not fixed by the evidence.`
+            `The ${b}${b} offspring proves both parents carry ${b}, but the first-locus evidence is incomplete.`
         },
         {
-          parents:
-            `two individuals with phenotype ${A}_${B}_`,
-          offspring:
-            `at least one ${a}${a}${b}${b} offspring`,
+          evidence:
+            `Two ${A}_${B}_ parents produce at least one ${a}${a}${b}${b} offspring.`,
           correct:
             `Both parents must be ${A}${a}${B}${b}`,
           distractors: [
+            `Only one parent must be ${A}${a}${B}${b}`,
             `Both parents must be ${A}${A}${B}${B}`,
-            `One parent may lack ${a}`,
-            `Only the mother must carry both recessive alleles`
+            `One parent may lack ${a} or ${b}`
           ],
           explanation:
-            `The double-recessive offspring requires each parent to contribute both ${a} and ${b}.`
+            `Each parent must contribute both recessive alleles while showing dominant phenotypes.`
         },
         {
-          parents:
-            `an unknown ${A}_${B}_ individual crossed with ${a}${a}${b}${b}`,
-          offspring:
-            `only ${A}_${B}_ and ${A}_${b}${b} classes occur in a large sample`,
+          evidence:
+            `An ${A}_${b}${b} parent and an ${a}${a}${B}_ parent produce both ${A}_${B}_ and ${a}${a}${b}${b} offspring.`,
           correct:
-            `The unknown parent is ${A}${A}${B}${b}`,
+            `The first parent is ${A}${a}${b}${b}, and the second is ${a}${a}${B}${b}`,
           distractors: [
-            `The unknown parent is ${A}${a}${B}${b}`,
-            `The unknown parent is ${A}${A}${B}${B}`,
-            `The unknown parent is ${A}${a}${B}${B}`
+            `The first parent is ${A}${A}${b}${b}, and the second is ${a}${a}${B}${B}`,
+            `Both parents are ${A}${a}${B}${b}`,
+            `The parental genotypes cannot be constrained at either locus`
           ],
           explanation:
-            `The unknown parent always supplies ${A}, but supplies either ${B} or ${b}.`
+            `The double-recessive offspring proves the first parent carries ${a} and the second carries ${b}; their phenotypes fix the other homozygous recessive loci.`
         }
       ];
 
@@ -201,18 +195,18 @@ export function registerObjective11(ctx) {
         "dh11-locus-by-locus-inference",
         "dihybrid",
         "intermediate",
-        `${item.parents} produce ${item.offspring}.`,
+        item.evidence,
         "Which conclusion is best supported?",
         shuffle([item.correct, ...item.distractors]),
         item.correct,
-        "Evaluate the evidence separately at each locus. Do not infer heterozygosity where no recessive offspring class has been observed.",
-        `${item.explanation} Therefore, ${item.correct}. Key takeaway: hidden heterozygosity must be inferred locus by locus from specific offspring evidence.`
+        "Evaluate each locus separately and distinguish proven heterozygosity from unresolved genotype possibilities.",
+        `${item.explanation} Therefore, ${item.correct}. Key takeaway: hidden heterozygosity should be inferred one locus at a time from specific offspring evidence.`
       );
     }
   );
 
   // -------------------------------------------------------------------------
-  // ADVANCED — distinguish proof from support in finite samples
+  // ADVANCED — distinguish logical proof from probabilistic support
   // -------------------------------------------------------------------------
 
   register(
@@ -227,55 +221,55 @@ export function registerObjective11(ctx) {
       const scenarios = [
         {
           evidence:
-            `An ${A}_${B}_ parent crossed with ${a}${a}${b}${b} produces one ${A}_${B}_ offspring.`,
-          correct:
-            "The result is compatible with several genotypes and does not prove homozygosity",
-          distractors: [
-            `The parent is proven to be ${A}${A}${B}${B}`,
-            `The parent is proven to be ${A}${a}${B}${b}`,
-            "The tester genotype is invalid"
-          ],
-          explanation:
-            `A single double-dominant offspring could be produced by multiple dominant parental genotypes.`
-        },
-        {
-          evidence:
-            `An ${A}_${B}_ parent crossed with ${a}${a}${b}${b} produces one ${a}${a}${b}${b} offspring.`,
-          correct:
-            `The parent is proven to carry both ${a} and ${b}`,
-          distractors: [
-            `The parent is proven to be ${A}${A}${B}${B}`,
-            "The result provides no genotype information",
-            `Only one recessive allele is proven`
-          ],
-          explanation:
-            `The tester supplies one ${a} and one ${b}; the unknown parent must have supplied the other ${a} and ${b}.`
-        },
-        {
-          evidence:
-            `An ${A}_${B}_ parent crossed with ${a}${a}${b}${b} produces 20 offspring, all ${A}_${B}_.`,
-          correct:
-            `The data strongly support ${A}${A}${B}${B}, but do not prove it absolutely`,
-          distractors: [
-            `The parent is mathematically proven to be ${A}${A}${B}${B}`,
-            `The parent must be ${A}${a}${B}${b}`,
-            "The data are uninformative"
-          ],
-          explanation:
-            `A heterozygous parent could produce only dominant offspring by chance, although that becomes increasingly unlikely with larger samples.`
-        },
-        {
-          evidence:
             `Two ${A}_${B}_ parents produce one ${a}${a}${b}${b} offspring.`,
           correct:
             `Both parents are proven to be ${A}${a}${B}${b}`,
           distractors: [
-            `Only one parent must carry both ${a} and ${b}`,
-            `Both parents are proven homozygous dominant`,
-            "The offspring could arise without parental recessive alleles"
+            `Only one parent is proven to carry ${a} and ${b}`,
+            `The result merely supports, but does not prove, double heterozygosity`,
+            `Both parents are proven homozygous dominant`
           ],
           explanation:
-            `Each parent must contribute ${a} and ${b}, and both show dominant phenotypes, so both are double heterozygotes.`
+            `Each parent must contribute ${a} and ${b}; because both show dominant phenotypes, each must be heterozygous at both loci.`
+        },
+        {
+          evidence:
+            `Two ${A}_${B}_ parents produce 20 offspring, all with phenotype ${A}_${B}_.`,
+          correct:
+            "The result supports homozygosity at one or both loci but does not prove it",
+          distractors: [
+            `Both parents are proven ${A}${A}${B}${B}`,
+            `Both parents are proven ${A}${a}${B}${b}`,
+            "The offspring provide no genetic information"
+          ],
+          explanation:
+            `Heterozygous parents can produce only dominant-phenotype offspring by chance, although the likelihood decreases as sample size grows.`
+        },
+        {
+          evidence:
+            `One ${a}${a}${B}_ offspring is produced by two ${A}_${B}_ parents.`,
+          correct:
+            `Both parents are proven heterozygous at the ${A}/${a} locus, but their second-locus genotypes remain unresolved`,
+          distractors: [
+            `Both parents are proven ${A}${a}${B}${b}`,
+            `Only one parent is proven to carry ${a}`,
+            `Both parents are proven homozygous dominant`
+          ],
+          explanation:
+            `The offspring is decisive at the first locus only.`
+        },
+        {
+          evidence:
+            `A single ${A}${a}${B}${b} offspring is produced by two parents of unknown genotype.`,
+          correct:
+            "Many different parental genotype combinations remain possible",
+          distractors: [
+            `Both parents are proven ${A}${a}${B}${b}`,
+            `One parent must be ${A}${A}${B}${B} and the other ${a}${a}${b}${b}`,
+            `Neither parent can be homozygous at any locus`
+          ],
+          explanation:
+            `The offspring reveals transmitted alleles but not the complete genotype of either parent.`
         }
       ];
 
@@ -289,14 +283,14 @@ export function registerObjective11(ctx) {
         "Which statement best describes the strength of the evidence?",
         shuffle([item.correct, ...item.distractors]),
         item.correct,
-        "Ask whether the observation is impossible under competing genotypes or merely less likely.",
-        `${item.explanation} Therefore, ${item.correct.toLowerCase()}. Key takeaway: some offspring observations prove hidden heterozygosity, whereas absence of a class usually provides only probabilistic support.`
+        "Ask whether competing parental genotypes are impossible or merely less likely.",
+        `${item.explanation} Therefore, ${item.correct.toLowerCase()}. Key takeaway: observed diagnostic offspring can prove allele carriage, whereas missing classes usually provide only probabilistic support.`
       );
     }
   );
 
   // -------------------------------------------------------------------------
-  // ADVANCED — diagnose overconfident conclusions from missing classes
+  // ADVANCED — diagnose overconfident family-cross conclusions
   // -------------------------------------------------------------------------
 
   register(
@@ -319,35 +313,35 @@ export function registerObjective11(ctx) {
         },
         {
           claim:
-            `“All ten testcross offspring were ${A}_${B}_, so the unknown parent is certainly ${A}${A}${B}${B}.”`,
-          correct:
-            "The result supports homozygosity but does not prove it with absolute certainty",
-          explanation:
-            `A heterozygous parent could, by chance, contribute dominant alleles to all ten offspring.`
-        },
-        {
-          claim:
-            `“Because no ${a}${a} offspring were observed, both parents must be ${A}${A}.”`,
-          correct:
-            "Absence of recessive offspring does not distinguish homozygosity from an unobserved heterozygous outcome",
-          explanation:
-            `At least one parent might be ${A}${a}; the sample may simply have missed ${a}${a} offspring.`
-        },
-        {
-          claim:
             `“One ${a}${a}${B}_ offspring proves both parents are heterozygous at both loci.”`,
           correct:
             `The offspring proves both parents carry ${a}, but gives no proof that both carry ${b}`,
           explanation:
-            `The evidence is decisive at the ${A}/${a} locus only.`
+            `The evidence is decisive only at the ${A}/${a} locus.`
         },
         {
           claim:
-            `“One ${a}${a}${b}${b} offspring from two dominant-phenotype parents proves only that one parent carries recessive alleles.”`,
+            `“All offspring showed ${A}_${B}_, so both parents must be homozygous dominant.”`,
+          correct:
+            "All-dominant offspring support homozygosity but do not prove it in a finite sample",
+          explanation:
+            `Possible recessive classes may simply have been missed by chance.`
+        },
+        {
+          claim:
+            `“One ${a}${a}${b}${b} offspring from two dominant-phenotype parents proves only one parent carries recessive alleles.”`,
           correct:
             `Both parents must carry both ${a} and ${b}`,
           explanation:
             `The offspring receives one recessive allele at each locus from each parent.`
+        },
+        {
+          claim:
+            `“Because one offspring is ${A}${a}${B}${b}, both parents must also be double heterozygotes.”`,
+          correct:
+            "An offspring genotype does not uniquely determine both parental genotypes",
+          explanation:
+            `Many parental combinations can contribute one dominant and one recessive allele at each locus.`
         }
       ];
 
@@ -363,11 +357,11 @@ export function registerObjective11(ctx) {
           item.correct,
           "The student ignored crossing over",
           "The student assumed incomplete dominance",
-          "The student used too many offspring classes"
+          "The student used too many loci"
         ]),
         item.correct,
-        "Separate positive evidence from missing evidence. An observed recessive class can be decisive; an absent class may simply reflect sampling.",
-        `${item.explanation} Key takeaway: presence of a diagnostic offspring class can prove hidden heterozygosity, but absence of a class rarely proves homozygosity in a finite sample.`
+        "Separate positive evidence from missing evidence and avoid inferring more loci than the offspring phenotype actually reveals.",
+        `${item.explanation} Key takeaway: presence of a diagnostic class can be decisive, but absence of a class or a single non-diagnostic offspring rarely determines complete parental genotypes.`
       );
     }
   );
