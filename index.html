@@ -234,6 +234,189 @@
     .engine-topics{grid-template-columns:1fr}
     .engine-topic{min-height:205px}
   }
+
+  .engine-topic.featured.dihybrid-featured{
+    background:
+      radial-gradient(circle at 88% 14%,rgba(255,255,255,.16),transparent 28%),
+      linear-gradient(145deg,#5b2a86 0%,#7c3fb3 55%,#9a5bd0 100%);
+    box-shadow:0 18px 38px rgba(91,42,134,.22);
+  }
+
+  .engine-topic.featured.dihybrid-featured:hover{
+    border-color:transparent;
+    box-shadow:0 25px 50px rgba(91,42,134,.30);
+  }
+
+
+/* === Collapsible Support Video Widget === */
+.support-video-fab{
+  position:fixed;
+  right:24px !important;
+  bottom:158px !important;
+  z-index:9998;
+  width:auto !important;
+  min-height:0 !important;
+  height:auto !important;
+  padding:13px 18px !important;
+  border:0 !important;
+  border-radius:999px !important;
+  background:linear-gradient(135deg,#e11d48,#f43f5e) !important;
+  color:#fff !important;
+  font-family:Arial, Helvetica, sans-serif !important;
+  font-size:15px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  letter-spacing:.2px !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:9px !important;
+  text-align:center !important;
+  box-shadow:0 14px 32px rgba(7,21,47,.32) !important;
+  cursor:pointer !important;
+  overflow:visible !important;
+}
+
+.support-video-fab::after{ content:none !important; }
+
+.support-video-fab:hover{
+  transform:translateY(-3px) scale(1.03) !important;
+  box-shadow:0 20px 42px rgba(7,21,47,.42) !important;
+  filter:brightness(1.06) !important;
+}
+
+.support-video-panel{
+  display:none;
+  position:fixed;
+  right:24px;
+  bottom:222px;
+  z-index:9999;
+  width:min(520px, calc(100vw - 32px));
+  background:#ffffff;
+  border-radius:22px;
+  box-shadow:0 24px 60px rgba(0,0,0,.35);
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.55);
+}
+
+.support-video-panel.open{ display:block; animation:supportSlideUp .22s ease-out; }
+
+@keyframes supportSlideUp{
+  from{ opacity:0; transform:translateY(14px) scale(.98); }
+  to{ opacity:1; transform:translateY(0) scale(1); }
+}
+
+.support-video-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:13px 15px;
+  color:white;
+  background:linear-gradient(135deg,#07152f,#0f766e);
+}
+
+.support-video-title{
+  font-size:16px;
+  font-weight:900;
+  line-height:1.2;
+}
+
+.support-video-close{
+  width:auto !important;
+  min-height:0 !important;
+  height:auto !important;
+  padding:8px 11px !important;
+  border:0 !important;
+  border-radius:12px !important;
+  background:rgba(255,255,255,.16) !important;
+  color:white !important;
+  font-size:14px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  box-shadow:none !important;
+  cursor:pointer !important;
+  overflow:visible !important;
+}
+
+.support-video-close::after{ content:none !important; }
+
+.support-video-close:hover{
+  background:rgba(255,255,255,.25) !important;
+  transform:translateY(-2px) !important;
+}
+
+.support-video-body{
+  padding:14px;
+  background:#f8fafc;
+}
+
+.support-video-frame{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  overflow:hidden;
+  border-radius:16px;
+  box-shadow:0 8px 22px rgba(7,21,47,.14);
+  background:#07152f;
+}
+
+.support-video-frame iframe{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:0;
+}
+
+.support-video-message{
+  margin:13px 2px 12px 2px;
+  color:#0f172a;
+  font-size:14.5px;
+  line-height:1.45;
+  font-weight:650;
+}
+
+.support-video-actions{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin-top:10px;
+}
+
+.support-video-coffee{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:12px 22px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#ffe45c,#ffdd00);
+  color:#000;
+  text-decoration:none;
+  font-weight:900;
+  font-size:14px;
+  box-shadow:0 12px 26px rgba(0,0,0,.22);
+}
+
+.support-video-coffee:hover{ transform:translateY(-3px) scale(1.03); box-shadow:0 16px 30px rgba(0,0,0,.28); }
+
+@media(max-width:600px){
+  .support-video-fab{
+    right:16px !important;
+    bottom:152px !important;
+    padding:12px 15px !important;
+    font-size:14px !important;
+  }
+  .support-video-panel{
+    right:10px;
+    left:10px;
+    bottom:210px;
+    width:auto;
+    border-radius:18px;
+  }
+}
+
 </style>
 
 </head>
@@ -242,16 +425,16 @@
 <header class="site-header">
   <div class="site-container">
     <nav class="site-nav">
-      <a class="site-brand" href="index.html">
+      <a class="site-brand" href="https://www.ampossot.com">
         <div class="site-brand-mark">AP</div>
-        <span>ampossot.com</span>
+        <span>www.ampossot.com</span>
       </a>
       <div class="site-nav-links" aria-label="Primary navigation">
-        <a href="index.html#tools">Tools</a>
+        <a href="https://virtual.ampossot.com">Tools</a>
         <a href="index.html#teaching">Teaching</a>
-        <a href="index.html#research">Research</a>
-        <a href="index.html#about">About</a>
-        <a href="publications_v1.html">Publications</a>
+        <a href="https://www.ampossot.com/#research">Research</a>
+        <a href="https://www.ampossot.com/#about">About</a>
+        <a href="https://www.ampossot.com/publications_v1">Publications</a>
         <a href="https://scholar.google.com/citations?hl=en&amp;user=jm_Ub4wAAAAJ&amp;view_op=list_works&amp;sortby=pubdate" target="_blank" rel="noopener">Google Scholar</a>
         <a href="index.html#contact">Contact</a>
       </div>
@@ -316,10 +499,10 @@
             <div class="engine-topic-bottom"><span>Reverse inference</span><span class="engine-topic-arrow">Practise →</span></div>
           </button>
 
-          <button class="engine-topic" type="button" data-topic-launch="dihybrid">
-            <div class="engine-topic-top"><span class="engine-topic-icon">🧩</span></div>
-            <div><h3>Dihybrid Probability</h3><p>Independent loci, product rules, expected ratios, and multilocus reasoning.</p></div>
-            <div class="engine-topic-bottom"><span>Two-gene crosses</span><span class="engine-topic-arrow">Practise →</span></div>
+          <button class="engine-topic featured dihybrid-featured" type="button" data-topic-launch="dihybrid">
+            <div class="engine-topic-top"><span class="engine-topic-icon">🧩</span><span class="engine-topic-status">Fully rebuilt</span></div>
+            <div><h3>Dihybrid Inheritance</h3><p>Independent assortment, gamete probability, product rules, expected ratios, reverse inference, and evidence.</p></div>
+            <div class="engine-topic-bottom"><span>Two-gene reasoning</span><span class="engine-topic-arrow">Begin →</span></div>
           </button>
 
           <button class="engine-topic" type="button" data-topic-launch="nonmendelian">
@@ -465,7 +648,7 @@
           <select id="topic">
             <option value="mixed">Mixed practice</option>
             <option value="monohybrid">Monohybrid crosses</option>
-            <option value="gametes">Gametes and genotype logic</option>
+            <option value="gametes">Gametes &amp; Meiosis</option>
             <option value="testcross">Testcrosses and reverse inference</option>
             <option value="dihybrid">Dihybrid probability</option>
             <option value="nonmendelian">Incomplete dominance and codominance</option>
@@ -563,6 +746,28 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 
+<button aria-controls="supportVideoPanel" aria-expanded="false" aria-label="Open support video" class="support-video-fab" id="supportVideoButton" onclick="toggleSupportVideo()" type="button">
+  ❤️ Support the Virtual Lab
+</button>
+<div aria-labelledby="supportVideoTitle" class="support-video-panel" id="supportVideoPanel" role="dialog">
+<div class="support-video-head">
+<div class="support-video-title" id="supportVideoTitle">Support the Genetics Virtual Lab</div>
+<button class="support-video-close" onclick="closeSupportVideo()" type="button">Close</button>
+</div>
+<div class="support-video-body">
+<div class="support-video-frame">
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" loading="lazy" src="https://www.youtube-nocookie.com/embed/HgVjxqCLz64?rel=0" title="Support the Genetics Virtual Lab">
+</iframe>
+</div>
+<p class="support-video-message">
+      If these tools have helped your teaching or learning, please consider supporting their continued development.
+    </p>
+<div class="support-video-actions">
+<a class="support-video-coffee" href="https://www.buymeacoffee.com/ampossot" rel="noopener noreferrer" target="_blank">☕ Buy me a coffee</a>
+</div>
+</div>
+</div>
+
 <footer class="site-footer" id="contact">
   <div class="site-container site-footer-grid">
     <div>
@@ -571,13 +776,29 @@ document.addEventListener("DOMContentLoaded", function () {
     </div>
     <div class="site-footer-links">
       <a href="mailto:andres.posso@usask.ca">Email</a>
-      <a href="index.html#tools">Tools</a>
-      <a href="index.html#research">Research</a>
-      <a href="publications_v1.html">Publications</a>
+      <a href="https://virtual.ampossot.com">Tools</a>
+      <a href="https://www.ampossot.com/#research">Research</a>
+      <a href="https://www.ampossot.com/publications_v1">Publications</a>
     </div>
   </div>
 </footer>
 <script data-cfasync="false" data-color="#0F766E" data-description="Support the development of free genetics education." data-id="ampossot" data-message="Support Education. Inspire Discovery." data-name="BMC-Widget" data-position="Right" data-x_margin="20" data-y_margin="20" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"></script>
+
+
+<script>
+function toggleSupportVideo(){
+  const panel = document.getElementById('supportVideoPanel');
+  const button = document.getElementById('supportVideoButton');
+  const isOpen = panel.classList.toggle('open');
+  button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+function closeSupportVideo(){
+  const panel = document.getElementById('supportVideoPanel');
+  const button = document.getElementById('supportVideoButton');
+  panel.classList.remove('open');
+  if(button){ button.setAttribute('aria-expanded', 'false'); }
+}
+</script>
 
 </body>
 </html>
