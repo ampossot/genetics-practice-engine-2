@@ -12,6 +12,9 @@ import { registerObjective03 } from "./objective03.js";
 import { registerObjective04 } from "./objective04.js";
 import { registerObjective05 } from "./objective05.js";
 import { registerObjective06 } from "./objective06.js";
+import { registerObjective07 } from "./objective07.js";
+import { registerObjective08 } from "./objective08.js";
+import { registerObjective09 } from "./objective09.js";
 
 export function registerXLinkedTopic(ctx) {
   registerObjective01(ctx);
@@ -20,4 +23,7 @@ export function registerXLinkedTopic(ctx) {
   registerObjective04(ctx);
   registerObjective05(ctx);
   registerObjective06(ctx);
+  registerObjective07(ctx);
+  registerObjective08(ctx);
+  registerObjective09(ctx);
 }
