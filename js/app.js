@@ -2,6 +2,7 @@ import { registerLinkageTopic } from "../topics/linkage.js";
 import { registerMonohybridTopic } from "../topics/monohybrid.js";
 import { registerGametesTopic } from "../topics/gametes/index.js";
 import { registerDihybridTopic } from "../topics/dihybrid/index.js";
+import { registerXLinkedTopic } from "../topics/xlinked/index.js";
 
 "use strict";
 
@@ -258,26 +259,7 @@ import { registerDihybridTopic } from "../topics/dihybrid/index.js";
 
   add("nonmendelian","advanced","expressivity",()=>q("expressivity","nonmendelian","advanced","Several individuals carry the same disease-causing allele. All show the trait, but severity ranges from mild to severe.","Which concept best explains the variation in severity?",["Variable expressivity","Incomplete penetrance","Codominance","Genetic anticipation"],"Variable expressivity","Penetrance concerns whether a phenotype appears; expressivity concerns its degree.","Because every carrier is affected but the intensity varies, this is variable expressivity."));
 
-  // X-LINKED
-  add("sexlinked","beginner","father-son",()=>q("father-son","sexlinked","beginner","A gene is located on the X chromosome.","Why can a father not transmit his X-linked allele directly to a son?",["A son receives the Y chromosome from his father","The allele is always recessive","The paternal X is destroyed during meiosis","The mother determines all inherited alleles"],"A son receives the Y chromosome from his father","Identify which paternal sex chromosome produces a son.","A son receives Y from his father and X from his mother, so direct father-to-son X-linked transmission does not occur."));
-
-  add("sexlinked","beginner","carrier-sons",()=>q("carrier-sons","sexlinked","beginner","A recessive allele a is X-linked. A carrier female XᴬXᵃ mates with an unaffected male XᴬY.","Among sons, what fraction is expected to be affected?",fractionOptions("1/2"),"1/2","Sons receive Y from the father and one of the mother's X chromosomes.","Half of sons receive Xᵃ from the carrier mother, so 1/2 are affected."));
-
-  add("sexlinked","intermediate","xlinked-cross",()=>{
-    const c=pick([
-      {cross:"XᴬXᵃ × XᴬY",group:"all children",event:"affected",ans:"1/4",why:"only XᵃY sons are affected"},
-      {cross:"XᴬXᵃ × XᵃY",group:"daughters",event:"affected",ans:"1/2",why:"all daughters receive paternal Xᵃ; half also receive maternal Xᵃ"},
-      {cross:"XᵃXᵃ × XᴬY",group:"sons",event:"affected",ans:"1",why:"every son receives maternal Xᵃ"},
-      {cross:"XᴬXᴬ × XᵃY",group:"daughters",event:"carriers",ans:"1",why:"all daughters are XᴬXᵃ"}
-    ]);
-    return q("xlinked-cross","sexlinked","intermediate",`A recessive allele a is X-linked. The cross is ${c.cross}.`,`Among ${c.group}, what proportion is expected to be ${c.event}?`,fractionOptions(c.ans),c.ans,"Track daughters and sons separately before conditioning on sex.",`${c.why}; therefore the answer is ${c.ans}.`);
-  });
-
-  add("sexlinked","intermediate","infer-carrier",()=>q("infer-carrier","sexlinked","intermediate","An unaffected couple has a son affected by an X-linked recessive condition. The father is unaffected.","What is the most likely genotype of the mother?",["XᴬXᴬ","XᴬXᵃ","XᵃXᵃ","XᴬY"],"XᴬXᵃ","The affected son received his X chromosome from his mother.","The mother is unaffected but transmitted Xᵃ, so she is most likely a heterozygous carrier."));
-
-  add("sexlinked","advanced","xlinked-daughters",()=>q("xlinked-daughters","sexlinked","advanced","A woman whose father had an X-linked recessive disorder is unaffected. Assume the allele is fully penetrant and rare outside the family. She mates with an unaffected man.","What is the probability that a randomly chosen child is an affected son?",fractionOptions("1/4"),"1/4","The woman is an obligate carrier. Multiply P(son) by P(receives mutant X).","Her affected father gave her Xᵃ, so she is XᴬXᵃ. P(son) × P(Xᵃ from mother) = 1/2 × 1/2 = 1/4."));
-
-  add("sexlinked","advanced","xlinked-dominant",()=>q("xlinked-dominant","sexlinked","advanced","An affected father has an X-linked dominant allele and mates with an unaffected mother.","Which outcome is expected, assuming full penetrance?",["All daughters affected and no sons affected","All sons affected and no daughters affected","Half of daughters and half of sons affected","All children affected"],"All daughters affected and no sons affected","The father gives his X to every daughter and his Y to every son.","All daughters inherit the affected paternal X; sons inherit the paternal Y and are unaffected."));
+  // X-LINKED inheritance is registered from topics/xlinked/index.js
 
   // CHI-SQUARE
   add("chisquare","beginner","chi-expected",()=>{
@@ -409,6 +391,30 @@ import { registerDihybridTopic } from "../topics/dihybrid/index.js";
       traits, traitRule, rng: () => rng
     });
     registerLinkageTopic({ add, q, pick, shuffle, chooseOptions, rng: () => rng });
+
+    // The X-linked objective modules use the internal topic key "xlinked", while
+    // the existing app UI and saved-progress system use "sexlinked". These small
+    // adapters preserve the current HTML values and storage keys without requiring
+    // edits to all 12 objective modules.
+    registerXLinkedTopic({
+      add: (topic, difficulty, id, build, metadata = {}) =>
+        add(topic === "xlinked" ? "sexlinked" : topic, difficulty, id, build, metadata),
+      q: (id, topic, difficulty, context, question, options, correct, hint, explanation, misconceptions = {}) =>
+        q(
+          id,
+          topic === "xlinked" ? "sexlinked" : topic,
+          difficulty,
+          context,
+          question,
+          options,
+          correct,
+          hint,
+          explanation,
+          misconceptions
+        ),
+      pick,
+      shuffle
+    });
 
 function chooseGenerator(){
     let pool=eligibleGenerators();
