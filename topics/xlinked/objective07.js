@@ -98,7 +98,10 @@ export function registerObjective07(ctx) {
     `${x(locus.recessiveAllele)} produces ${locus.recessiveTrait} when no dominant allele is present.`;
 
   const optionSet = (correct, distractors) =>
-    shuffle([correct, ...distractors.filter((d) => d !== correct)]).slice(0, 4);
+    shuffle([
+      correct,
+      ...shuffle(distractors.filter((d) => d !== correct)).slice(0, 3)
+    ]);
 
   // -------------------------------------------------------------------------
   // BEGINNER — infer a missing parental genotype from a decisive clue

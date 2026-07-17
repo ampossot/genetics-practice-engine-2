@@ -97,7 +97,7 @@ export function registerObjective05(ctx) {
       "beginner",
       `${ruleText(l)} ${item.stem}`,
       "Which conclusion is required by X-linked inheritance?",
-      shuffle([item.correct, ...distractors]).slice(0, 4),
+      shuffle([item.correct, ...shuffle(distractors.filter((value) => value !== item.correct)).slice(0, 3)]),
       item.correct,
       "First identify whether the child received an X or Y chromosome from each parent.",
       item.explanation
@@ -163,7 +163,7 @@ export function registerObjective05(ctx) {
       "intermediate",
       `${ruleText(l)} ${item.evidence}`,
       "Which statement is the strongest conclusion supported by the evidence?",
-      shuffle([item.correct, ...distractors]).slice(0, 4),
+      shuffle([item.correct, ...shuffle(distractors.filter((value) => value !== item.correct)).slice(0, 3)]),
       item.correct,
       "Separate what must be true from what is merely possible. Use both phenotype and sex-specific chromosome transmission.",
       item.explanation
@@ -231,7 +231,7 @@ export function registerObjective05(ctx) {
       "advanced",
       `${ruleText(l)} ${item.family}`,
       "Which parental genotype pair is best supported?",
-      shuffle([item.correct, ...distractors]).slice(0, 4),
+      shuffle([item.correct, ...shuffle(distractors.filter((value) => value !== item.correct)).slice(0, 3)]),
       item.correct,
       "Use the most informative child first: recessive sons reveal a maternal allele, while recessive daughters reveal an allele from both parents.",
       item.explanation

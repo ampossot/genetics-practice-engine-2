@@ -81,7 +81,10 @@ export function registerObjective08(ctx) {
     `The trait is X-linked recessive. ${x(locus.dominantAllele)} is associated with ${locus.dominantTrait}, while ${x(locus.recessiveAllele)} is associated with ${locus.recessiveTrait} when no dominant allele is present.`;
 
   const options = (correct, distractors) =>
-    shuffle([correct, ...distractors.filter((item) => item !== correct)]).slice(0, 4);
+    shuffle([
+      correct,
+      ...shuffle(distractors.filter((item) => item !== correct)).slice(0, 3)
+    ]);
 
   // -------------------------------------------------------------------------
   // BEGINNER — identify obligate carriers

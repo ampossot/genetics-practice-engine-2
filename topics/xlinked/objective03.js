@@ -11,7 +11,13 @@
  */
 
 export function registerObjective03(ctx) {
-  const { add, q, pick, shuffle, chooseOptions } = ctx;
+  const { add, q, pick, shuffle } = ctx;
+  const chooseOptions = ctx.chooseOptions || ((correct, candidates) =>
+    shuffle([
+      correct,
+      ...shuffle(candidates.filter((value) => value !== correct)).slice(0, 3)
+    ])
+  );
 
   const OBJECTIVE =
     "predicting offspring outcomes from X-linked crosses";
@@ -127,7 +133,10 @@ export function registerObjective03(ctx) {
         "beginner",
         `${ruleText(locus)} An egg carrying ${item.egg} is fertilized by a sperm carrying ${item.sperm}.`,
         "What is the offspring genotype?",
-        shuffle([correct, ...distractors.filter((value) => value !== correct)]).slice(0, 4),
+        shuffle([
+          correct,
+          ...shuffle(distractors.filter((value) => value !== correct)).slice(0, 3)
+        ]),
         correct,
         "Place the maternal sex chromosome and paternal sex chromosome together. A Y-bearing sperm produces a son.",
         `The egg contributes ${item.egg}, and the sperm contributes ${item.sperm}, giving ${correct}. This offspring is ${sexOf(correct)} and has ${phenotypeOf(correct, locus)}.`

@@ -25,14 +25,18 @@ export function registerObjective10(ctx) {
     add("xlinked", difficulty, id, build, { objective: OBJECTIVE, task });
 
   const options = (correct, distractors) =>
-    shuffle([correct, ...distractors.filter((item) => item !== correct)]).slice(0, 4);
+    shuffle([
+      correct,
+      ...shuffle(distractors.filter((item) => item !== correct)).slice(0, 3)
+    ]);
 
   const percentOptions = (correct) =>
-    shuffle(
-      [correct, "0%", "25%", "50%", "75%", "100%"].filter(
-        (value, index, array) => array.indexOf(value) === index
-      )
-    ).slice(0, 4);
+    shuffle([
+      correct,
+      ...shuffle(["0%", "25%", "50%", "75%", "100%"].filter(
+        (value) => value !== correct
+      )).slice(0, 3)
+    ]);
 
   const influencedTraits = [
     {
@@ -345,23 +349,13 @@ export function registerObjective10(ctx) {
           cross: `${A}${A} female × ${A}${a} male`,
           question:
             `What percentage of all offspring is expected to express ${item.phenotype}?`,
-          correct: "100%",
-          explanation:
-            `All offspring receive at least one ${A}. Daughters are ${A}${A} or ${A}${a}; only the ${A}${A} daughters express the trait, but every son with ${A} does. Wait carefully: half of daughters are ${A}${A}, half ${A}${a}; all sons express it. Therefore 75% of all offspring express the trait.`
-        },
-        {
-          cross: `${A}${A} female × ${A}${a} male`,
-          question:
-            `What percentage of all offspring is expected to express ${item.phenotype}?`,
           correct: "75%",
           explanation:
             `All sons express ${item.phenotype}. Among daughters, half are ${A}${A} and express it, while half are ${A}${a} and do not. With equal sex probability: 1/2 + 1/4 = 3/4.`
         }
       ];
 
-      const itemScenario = pick(scenarios.filter(
-        (scenario, index) => !(index === 6)
-      ));
+      const itemScenario = pick(scenarios);
 
       return q(
         "xl10-sex-influenced-cross",

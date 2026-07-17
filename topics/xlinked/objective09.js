@@ -102,14 +102,18 @@ export function registerObjective09(ctx) {
     `${locus.recessiveTrait}.`;
 
   const options = (correct, distractors) =>
-    shuffle([correct, ...distractors.filter((item) => item !== correct)]).slice(0, 4);
+    shuffle([
+      correct,
+      ...shuffle(distractors.filter((item) => item !== correct)).slice(0, 3)
+    ]);
 
   const percentOptions = (correct) =>
-    shuffle(
-      [correct, "0%", "25%", "50%", "75%", "100%"].filter(
-        (value, index, array) => array.indexOf(value) === index
-      )
-    ).slice(0, 4);
+    shuffle([
+      correct,
+      ...shuffle(["0%", "25%", "50%", "75%", "100%"].filter(
+        (value) => value !== correct
+      )).slice(0, 3)
+    ]);
 
   // -------------------------------------------------------------------------
   // BEGINNER — classify X-linked dominant versus recessive evidence

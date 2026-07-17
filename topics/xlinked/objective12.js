@@ -31,12 +31,18 @@ export function registerObjective12(ctx) {
     items.filter((item, index, array) => array.indexOf(item) === index);
 
   const options = (correct, distractors) =>
-    shuffle(unique([correct, ...distractors])).slice(0, 4);
+    shuffle([
+      correct,
+      ...shuffle(unique(distractors.filter((item) => item !== correct))).slice(0, 3)
+    ]);
 
   const percentOptions = (correct) =>
-    shuffle(
-      unique([correct, "0%", "12.5%", "25%", "37.5%", "50%", "75%", "100%"])
-    ).slice(0, 4);
+    shuffle([
+      correct,
+      ...shuffle(["0%", "12.5%", "25%", "37.5%", "50%", "75%", "100%"].filter(
+        (value) => value !== correct
+      )).slice(0, 3)
+    ]);
 
   const xrTraits = [
     {
@@ -530,7 +536,7 @@ export function registerObjective12(ctx) {
           evidence: [
             "The phenotype occurs in every generation.",
             "Males and females are affected.",
-            "An affected father has an affected son.",
+            "Direct father-to-son transmission occurs.",
             "Affected individuals generally have an affected parent."
           ],
           correct: modes.AD,
@@ -678,8 +684,8 @@ export function registerObjective12(ctx) {
         },
         {
           argument:
-            "An affected father has an affected son, so the trait cannot be X-linked.",
-          correct: "The reasoning is correct for direct father-to-son transmission.",
+            "Pedigree analysis confirms direct father-to-son transmission, so the causal allele cannot be X-linked.",
+          correct: "The reasoning is correct.",
           distractors: [
             "The reasoning is always incorrect.",
             "The trait must be X-linked dominant.",

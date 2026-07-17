@@ -35,7 +35,10 @@ export function registerObjective11(ctx) {
     items.filter((item, index, array) => array.indexOf(item) === index);
 
   const options = (correct, distractors) =>
-    shuffle(unique([correct, ...distractors])).slice(0, 4);
+    shuffle([
+      correct,
+      ...shuffle(unique(distractors.filter((item) => item !== correct))).slice(0, 3)
+    ]);
 
   const modes = {
     AD: "Autosomal dominant",
@@ -204,9 +207,9 @@ export function registerObjective11(ctx) {
       const cases = [
         {
           evidence:
-            "An affected father has an affected son.",
+            "Pedigree analysis confirms direct father-to-son transmission of the phenotype.",
           question:
-            "Which inheritance pattern is ruled out by this observation alone?",
+            "Which inheritance pattern is ruled out by this confirmed transmission event?",
           correct: modes.XLD,
           distractors: [modes.AD, modes.Y, modes.SL],
           hint:
@@ -332,7 +335,7 @@ export function registerObjective11(ctx) {
             "The trait appears in every generation and affects males and females.",
           question:
             "Which additional observation would most clearly distinguish the two models?",
-          correct: "An affected father has an affected son.",
+          correct: "Direct father-to-son transmission occurs.",
           distractors: [
             "An affected mother has an affected daughter.",
             "The trait appears in three generations.",

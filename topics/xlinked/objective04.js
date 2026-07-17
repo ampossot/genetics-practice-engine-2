@@ -81,7 +81,7 @@ export function registerObjective04(ctx) {
       "beginner",
       `${ruleText(l)} The original cross is ${cross(item.mother, item.father)}.`,
       "Which option represents the reciprocal cross?",
-      shuffle([correct, ...distractors]).slice(0, 4),
+      shuffle([correct, ...shuffle(distractors.filter((value) => value !== correct)).slice(0, 3)]),
       correct,
       "A reciprocal cross retains the contrasting parental conditions but exchanges which sex carries each condition.",
       `The reciprocal cross is ${correct}. The relevant parental phenotypes or alleles are retained, but their maternal and paternal assignments are reversed.${item.note ? ` ${item.note}` : ""}`
@@ -157,7 +157,7 @@ export function registerObjective04(ctx) {
       "intermediate",
       `${ruleText(l)} Cross 1: ${item.cross1}. Cross 2: ${item.cross2}.`,
       `Which statement correctly compares the ${item.focus}?`,
-      shuffle([item.correct, ...distractors]).slice(0, 4),
+      shuffle([item.correct, ...shuffle(distractors.filter((value) => value !== item.correct)).slice(0, 3)]),
       item.correct,
       item.focus === "sons"
         ? "Track the maternal X chromosome separately. Every son gets Y from the father."
@@ -238,7 +238,7 @@ export function registerObjective04(ctx) {
       "advanced",
       `${ruleText(l)} Cross 1: ${item.cross1}. Cross 2: ${item.cross2}.`,
       `What is the probability of ${item.target} in each cross?`,
-      shuffle([item.correct, ...distractors]).slice(0, 4),
+      shuffle([item.correct, ...shuffle(distractors.filter((value) => value !== item.correct)).slice(0, 3)]),
       item.correct,
       "List maternal eggs and paternal sperm for each cross, then count the requested offspring class out of all equally likely combinations.",
       item.explanation
@@ -297,7 +297,7 @@ export function registerObjective04(ctx) {
       "advanced",
       `${ruleText(l)} ${item.observation}`,
       "Which explanation best accounts for the observation?",
-      shuffle([item.correct, ...distractors]).slice(0, 4),
+      shuffle([item.correct, ...shuffle(distractors.filter((value) => value !== item.correct)).slice(0, 3)]),
       item.correct,
       "Use the sex-specific inheritance route: mothers give X to every child; fathers give X to daughters and Y to sons.",
       item.explanation

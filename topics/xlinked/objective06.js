@@ -195,8 +195,8 @@ export function registerObjective06(ctx) {
     const standard = ["0%", "25%", "50%", "75%", "100%"];
     return shuffle([
       correct,
-      ...standard.filter((value) => value !== correct)
-    ]).slice(0, 4);
+      ...shuffle(standard.filter((value) => value !== correct)).slice(0, 3)
+    ]);
   };
 
   // -------------------------------------------------------------------------
@@ -527,7 +527,7 @@ export function registerObjective06(ctx) {
         "advanced",
         `${ruleText(l)} Cross: ${s.cross} For each birth, the probability of ${s.event} is ${percent(s.singleP)}.`,
         task.stem,
-        shuffle([correct, ...candidateValues]).slice(0, 4),
+        shuffle([correct, ...shuffle(candidateValues).slice(0, 3)]),
         correct,
         "Treat separate births as independent trials. For “at least one,” it is usually easiest to calculate 1 minus the probability of none.",
         `${task.method} The result is ${correct}. Previous births do not change allele segregation in later births.`
