@@ -2,310 +2,305 @@
  * X-linked Inheritance — Objective 04
  *
  * Learning objective:
- * Infer parental genotypes and carrier status from offspring evidence in
- * X-linked crosses.
+ * Compare reciprocal X-linked crosses and explain why exchanging the sexes of
+ * parental genotypes can change offspring genotype and phenotype distributions.
  *
  * Design:
- * One beginner family, one intermediate family, and two advanced families.
- * Each family targets a different direction of inference.
+ * Four generator families target identification, comparison, prediction, and
+ * explanation. Variation comes from multiple organisms, loci, parental states,
+ * requested offspring classes, and misconception-based distractors.
  */
 
 export function registerObjective04(ctx) {
   const { add, q, pick, shuffle } = ctx;
 
-  const OBJECTIVE =
-    "inferring parental genotypes and carrier status from X-linked offspring evidence";
-
+  const OBJECTIVE = "comparing reciprocal X-linked crosses";
   const register = (difficulty, id, task, build) =>
-    add("xlinked", difficulty, id, build, {
-      objective: OBJECTIVE,
-      task
-    });
+    add("xlinked", difficulty, id, build, { objective: OBJECTIVE, task });
 
   const loci = [
-    {
-      organism: "fruit flies",
-      gene: "eye colour",
-      dominantTrait: "wild-type eyes",
-      recessiveTrait: "white eyes",
-      dominantAllele: "w+",
-      recessiveAllele: "w"
-    },
-    {
-      organism: "humans",
-      gene: "red-green colour vision",
-      dominantTrait: "typical colour vision",
-      recessiveTrait: "red-green colour blindness",
-      dominantAllele: "C",
-      recessiveAllele: "c"
-    },
-    {
-      organism: "laboratory mice",
-      gene: "coat pigmentation",
-      dominantTrait: "pigmented coat",
-      recessiveTrait: "reduced coat pigmentation",
-      dominantAllele: "P",
-      recessiveAllele: "p"
-    },
-    {
-      organism: "beetles",
-      gene: "wing pattern",
-      dominantTrait: "banded wings",
-      recessiveTrait: "unbanded wings",
-      dominantAllele: "B",
-      recessiveAllele: "b"
-    },
-    {
-      organism: "mosquitoes",
-      gene: "body colour",
-      dominantTrait: "dark body colour",
-      recessiveTrait: "light body colour",
-      dominantAllele: "D",
-      recessiveAllele: "d"
-    }
+    { organism: "fruit flies", gene: "eye colour", dominantTrait: "wild-type eyes", recessiveTrait: "white eyes", dominantAllele: "w+", recessiveAllele: "w" },
+    { organism: "humans", gene: "red-green colour vision", dominantTrait: "typical colour vision", recessiveTrait: "red-green colour blindness", dominantAllele: "C", recessiveAllele: "c" },
+    { organism: "laboratory mice", gene: "coat pigmentation", dominantTrait: "pigmented coat", recessiveTrait: "reduced coat pigmentation", dominantAllele: "P", recessiveAllele: "p" },
+    { organism: "beetles", gene: "wing pattern", dominantTrait: "banded wings", recessiveTrait: "unbanded wings", dominantAllele: "B", recessiveAllele: "b" },
+    { organism: "mosquitoes", gene: "body colour", dominantTrait: "dark body colour", recessiveTrait: "light body colour", dominantAllele: "D", recessiveAllele: "d" },
+    { organism: "moths", gene: "antenna shape", dominantTrait: "straight antennae", recessiveTrait: "curved antennae", dominantAllele: "S", recessiveAllele: "s" },
+    { organism: "fish", gene: "fin pigmentation", dominantTrait: "pigmented fins", recessiveTrait: "pale fins", dominantAllele: "F", recessiveAllele: "f" },
+    { organism: "crickets", gene: "body marking", dominantTrait: "striped body", recessiveTrait: "unstriped body", dominantAllele: "R", recessiveAllele: "r" }
   ];
 
   const x = (allele) => `X${allele}`;
   const female = (first, second) => `${x(first)}/${x(second)}`;
   const male = (allele) => `${x(allele)}/Y`;
+  const cross = (mother, father) => `${mother} female × ${father} male`;
 
   const ruleText = (locus) =>
-    `In ${locus.organism}, ${locus.gene} is X-linked. ` +
-    `${x(locus.dominantAllele)} produces ${locus.dominantTrait}, whereas ` +
+    `In ${locus.organism}, ${locus.gene} is X-linked recessive. ` +
+    `${x(locus.dominantAllele)} produces ${locus.dominantTrait}; ` +
     `${x(locus.recessiveAllele)} produces ${locus.recessiveTrait} when no dominant allele is present.`;
 
-  // -------------------------------------------------------------------------
-  // BEGINNER — infer the allele source for an affected son
-  // -------------------------------------------------------------------------
+  const reciprocalOf = (mother, father) => {
+    const maternalAlleles = mother.replaceAll("X", "").split("/");
+    const paternalAllele = father.replace("X", "").replace("/Y", "");
+    const newMother = female(paternalAllele, paternalAllele);
+    const newFather = male(maternalAlleles[0]);
+    return { mother: newMother, father: newFather };
+  };
 
-  register(
-    "beginner",
-    "xl4-affected-son-allele-source",
-    "maternal allele inference",
-    () => {
-      const locus = pick(loci);
-      const a = locus.recessiveAllele;
-
-      const correct =
-        `The mother must have contributed ${x(a)}; the father contributed Y`;
-
-      return q(
-        "xl4-affected-son-allele-source",
-        "xlinked",
-        "beginner",
-        `${ruleText(locus)} A son has genotype ${male(a)} and shows ${locus.recessiveTrait}.`,
-        "Which conclusion is required by this observation?",
-        shuffle([
-          correct,
-          `The father must have contributed ${x(a)} to his son`,
-          `The father contributed both ${x(a)} and Y`,
-          `The son must have inherited ${x(a)} independently of either parent`
-        ]),
-        correct,
-        "A son receives Y from his father and his only X chromosome from his mother.",
-        `Because the son is ${male(a)}, his ${x(a)} chromosome came from his mother, while his father supplied Y.`
-      );
-    }
-  );
+  const unique = (values) => [...new Set(values)];
 
   // -------------------------------------------------------------------------
-  // INTERMEDIATE — use a daughter's genotype to infer the father
+  // BEGINNER — identify the reciprocal cross
   // -------------------------------------------------------------------------
 
-  register(
-    "intermediate",
-    "xl4-daughter-infers-father",
-    "paternal genotype inference",
-    () => {
-      const locus = pick(loci);
-      const A = locus.dominantAllele;
-      const a = locus.recessiveAllele;
+  register("beginner", "xl4-identify-reciprocal", "identifying a reciprocal cross", () => {
+    const l = pick(loci);
+    const A = l.dominantAllele;
+    const a = l.recessiveAllele;
 
-      const scenarios = [
-        {
-          daughter: female(a, a),
-          correct: male(a),
-          distractors: [male(A), female(A, a), female(a, a)],
-          explanation:
-            `A daughter receives one X chromosome from her father. Because she is ${female(a, a)}, her father had to contribute ${x(a)} and therefore had genotype ${male(a)}.`
-        },
-        {
-          daughter: female(A, A),
-          correct: male(A),
-          distractors: [male(a), female(A, a), female(A, A)],
-          explanation:
-            `One of the daughter's ${x(A)} chromosomes came from her father, so he must have genotype ${male(A)}.`
-        },
-        {
-          daughter: female(A, a),
-          correct: "Either X-linked paternal genotype may be possible without knowing which allele came from the mother",
-          distractors: [
-            male(A),
-            male(a),
-            "The father must be heterozygous"
-          ],
-          explanation:
-            `A heterozygous daughter could receive ${x(A)} from her father and ${x(a)} from her mother, or the reverse. Her genotype alone does not identify which paternal X allele she received.`
-        }
-      ];
+    const templates = [
+      { mother: female(A, A), father: male(a), reciprocalMother: female(a, a), reciprocalFather: male(A) },
+      { mother: female(a, a), father: male(A), reciprocalMother: female(A, A), reciprocalFather: male(a) },
+      { mother: female(A, a), father: male(A), reciprocalMother: female(A, A), reciprocalFather: male(a), note: "Use the contrasting parental phenotypes represented in the original cross." },
+      { mother: female(A, a), father: male(a), reciprocalMother: female(a, a), reciprocalFather: male(A), note: "Use the contrasting parental phenotypes represented in the original cross." }
+    ];
 
-      const item = pick(scenarios);
+    const item = pick(templates);
+    const correct = cross(item.reciprocalMother, item.reciprocalFather);
+    const distractors = unique([
+      cross(item.mother, item.father),
+      cross(item.reciprocalMother, item.father),
+      cross(item.mother, item.reciprocalFather),
+      `${item.reciprocalFather} female × ${item.reciprocalMother} male`,
+      cross(female(A, a), male(a))
+    ]).filter((value) => value !== correct);
 
-      return q(
-        "xl4-daughter-infers-father",
-        "xlinked",
-        "intermediate",
-        `${ruleText(locus)} A daughter has genotype ${item.daughter}.`,
-        "What can be concluded about her father's genotype?",
-        shuffle([item.correct, ...item.distractors]),
-        item.correct,
-        "Every daughter receives her father's only X chromosome. Ask whether the daughter's genotype uniquely identifies that paternal X.",
-        item.explanation
-      );
-    }
-  );
+    return q(
+      "xl4-identify-reciprocal",
+      "xlinked",
+      "beginner",
+      `${ruleText(l)} The original cross is ${cross(item.mother, item.father)}.`,
+      "Which option represents the reciprocal cross?",
+      shuffle([correct, ...distractors]).slice(0, 4),
+      correct,
+      "A reciprocal cross retains the contrasting parental conditions but exchanges which sex carries each condition.",
+      `The reciprocal cross is ${correct}. The relevant parental phenotypes or alleles are retained, but their maternal and paternal assignments are reversed.${item.note ? ` ${item.note}` : ""}`
+    );
+  });
 
   // -------------------------------------------------------------------------
-  // ADVANCED — infer the mother's genotype from sons
+  // INTERMEDIATE — compare sons or daughters across reciprocal crosses
   // -------------------------------------------------------------------------
 
-  register(
-    "advanced",
-    "xl4-infer-mother-from-sons",
-    "maternal genotype inference",
-    () => {
-      const locus = pick(loci);
-      const A = locus.dominantAllele;
-      const a = locus.recessiveAllele;
+  register("intermediate", "xl4-compare-offspring-sex", "comparing one offspring sex", () => {
+    const l = pick(loci);
+    const A = l.dominantAllele;
+    const a = l.recessiveAllele;
 
-      const scenarios = [
-        {
-          evidence: `she has produced both ${male(A)} and ${male(a)} sons`,
-          correct: female(A, a),
-          distractors: [female(A, A), female(a, a), male(A)],
-          explanation:
-            `Sons receive their X chromosome from their mother. Producing both son genotypes shows that she can contribute both ${x(A)} and ${x(a)}, so she is ${female(A, a)}.`
-        },
-        {
-          evidence: `all of her sons are ${male(a)}, and genetic testing confirms she can produce only ${x(a)} eggs`,
-          correct: female(a, a),
-          distractors: [female(A, a), female(A, A), male(a)],
-          explanation:
-            `If she can produce only ${x(a)} eggs, both of her X chromosomes must carry ${a}; therefore she is ${female(a, a)}.`
-        },
-        {
-          evidence: `all of her sons are ${male(A)}, and genetic testing confirms she can produce only ${x(A)} eggs`,
-          correct: female(A, A),
-          distractors: [female(A, a), female(a, a), male(A)],
-          explanation:
-            `Producing only ${x(A)} eggs requires two ${x(A)} chromosomes, so the mother is ${female(A, A)}.`
-        },
-        {
-          evidence: `one observed son is ${male(a)}`, 
-          correct: `She must carry at least one ${x(a)} chromosome, but she could be ${female(A, a)} or ${female(a, a)}`,
-          distractors: [
-            `She must be ${female(A, a)}`,
-            `She must be ${female(a, a)}`,
-            `Her genotype cannot contain ${x(a)}`
-          ],
-          explanation:
-            `An ${male(a)} son proves that his mother can contribute ${x(a)}, but one son does not reveal whether her other X chromosome carries ${A} or ${a}.`
-        }
-      ];
+    const scenarios = [
+      {
+        cross1: cross(female(A, A), male(a)),
+        cross2: cross(female(a, a), male(A)),
+        focus: "sons",
+        correct: `Cross 1 produces sons with ${l.dominantTrait}, whereas Cross 2 produces sons with ${l.recessiveTrait}`,
+        explanation: `Sons receive Y from the father and their only X from the mother. Cross 1 mothers provide ${x(A)}; Cross 2 mothers provide ${x(a)}.`
+      },
+      {
+        cross1: cross(female(A, A), male(a)),
+        cross2: cross(female(a, a), male(A)),
+        focus: "daughters",
+        correct: `Both crosses produce heterozygous daughters with ${l.dominantTrait}`,
+        explanation: `Cross 1 daughters are ${female(A, a)}, and Cross 2 daughters are also ${female(A, a)}. The parental origin of the alleles changes, but the genotype does not.`
+      },
+      {
+        cross1: cross(female(A, a), male(A)),
+        cross2: cross(female(A, A), male(a)),
+        focus: "sons",
+        correct: `Only Cross 1 can produce sons with ${l.recessiveTrait}`,
+        explanation: `The heterozygous mother in Cross 1 can transmit ${x(a)} to sons. The homozygous dominant mother in Cross 2 can transmit only ${x(A)}.`
+      },
+      {
+        cross1: cross(female(A, a), male(a)),
+        cross2: cross(female(a, a), male(A)),
+        focus: "daughters",
+        correct: `Cross 1 can produce both daughter phenotypes, whereas Cross 2 produces only daughters with ${l.dominantTrait}`,
+        explanation: `Cross 1 daughters receive ${x(a)} from the father and either ${x(A)} or ${x(a)} from the mother. Cross 2 daughters receive ${x(A)} from the father, so all show the dominant phenotype.`
+      },
+      {
+        cross1: cross(female(A, a), male(A)),
+        cross2: cross(female(A, A), male(a)),
+        focus: "daughters",
+        correct: `Both crosses produce only daughters with ${l.dominantTrait}, but their possible genotypes differ`,
+        explanation: `Cross 1 daughters may be ${female(A, A)} or ${female(A, a)}. Cross 2 daughters are all ${female(A, a)}.`
+      },
+      {
+        cross1: cross(female(a, a), male(a)),
+        cross2: cross(female(a, a), male(A)),
+        focus: "sons",
+        correct: `The sons have ${l.recessiveTrait} in both crosses`,
+        explanation: `Both mothers are ${female(a, a)}, and sons inherit their X chromosome from the mother. The father's X-linked genotype does not alter sons.`
+      }
+    ];
 
-      const item = pick(scenarios);
+    const item = pick(scenarios);
+    const distractors = [
+      `The ${item.focus} are identical because reciprocal crosses always produce identical offspring`,
+      `The father determines the X-linked allele in every ${item.focus.slice(0, -1)}`,
+      `Cross 1 and Cross 2 differ only in offspring sex, not genotype or phenotype`,
+      `The Y chromosome carries the alternate allele and reverses the result`,
+      `Only the paternal phenotype determines the ${item.focus}`
+    ];
 
-      return q(
-        "xl4-infer-mother-from-sons",
-        "xlinked",
-        "advanced",
-        `${ruleText(locus)} A mother has the ${locus.dominantTrait} phenotype, unless the evidence below states otherwise. The evidence is that ${item.evidence}.`,
-        "Which conclusion about the mother's genotype is best supported?",
-        shuffle([item.correct, ...item.distractors]),
-        item.correct,
-        "Sons reveal which X chromosomes their mother can transmit because they receive Y, not X, from their father.",
-        item.explanation
-      );
-    }
-  );
+    return q(
+      "xl4-compare-offspring-sex",
+      "xlinked",
+      "intermediate",
+      `${ruleText(l)} Cross 1: ${item.cross1}. Cross 2: ${item.cross2}.`,
+      `Which statement correctly compares the ${item.focus}?`,
+      shuffle([item.correct, ...distractors]).slice(0, 4),
+      item.correct,
+      item.focus === "sons"
+        ? "Track the maternal X chromosome separately. Every son gets Y from the father."
+        : "Each daughter receives one maternal X and the father's X chromosome.",
+      item.explanation
+    );
+  });
 
   // -------------------------------------------------------------------------
-  // ADVANCED — judge whether family evidence is sufficient
+  // ADVANCED — compare probabilities or class distributions
   // -------------------------------------------------------------------------
 
-  register(
-    "advanced",
-    "xl4-evidence-sufficiency",
-    "information sufficiency",
-    () => {
-      const locus = pick(loci);
-      const A = locus.dominantAllele;
-      const a = locus.recessiveAllele;
+  register("advanced", "xl4-reciprocal-probability", "comparing offspring-class probabilities", () => {
+    const l = pick(loci);
+    const A = l.dominantAllele;
+    const a = l.recessiveAllele;
 
-      const scenarios = [
-        {
-          evidence: `A phenotypically normal mother and a ${male(A)} father have one ${male(a)} son.`,
-          question: "Is the mother's genotype uniquely determined?",
-          correct: `No. She must carry ${x(a)}, but she could be ${female(A, a)} or ${female(a, a)} unless her phenotype rules out the latter`,
-          distractors: [
-            `Yes. She must be ${female(A, a)}`,
-            `Yes. She must be ${female(a, a)}`,
-            `No. The son's genotype gives no information about the mother`
-          ],
-          explanation:
-            `The son proves that the mother carries ${x(a)}. If her normal phenotype is reliable under complete dominance, that additionally identifies her as ${female(A, a)}; without using that phenotype information, the son's genotype alone is not sufficient.`
-        },
-        {
-          evidence: `A father is ${male(a)}, and one daughter is ${female(A, a)}.`,
-          question: "Does this prove that the mother carries allele a?",
-          correct: `No. The daughter necessarily received ${x(a)} from her father and could have received ${x(A)} from the mother`,
-          distractors: [
-            `Yes. Every heterozygous daughter must receive ${x(a)} from her mother`,
-            `Yes. Fathers transmit Y to daughters`,
-            `No. Daughters do not inherit X chromosomes from fathers`
-          ],
-          explanation:
-            `The affected father contributes ${x(a)} to every daughter. This daughter's ${x(a)} therefore provides no evidence that her mother carries ${a}.`
-        },
-        {
-          evidence: `A father is ${male(A)}, and one daughter is ${female(A, a)}.`,
-          question: "Does this prove that the mother carries allele a?",
-          correct: `Yes. The father can contribute only ${x(A)}, so the daughter's ${x(a)} must have come from her mother`,
-          distractors: [
-            `No. The father could have contributed ${x(a)}`,
-            `No. The daughter could have produced ${x(a)} by mutation during fertilization`,
-            `Yes. Fathers contribute both X chromosomes to daughters`
-          ],
-          explanation:
-            `Because the father's only X is ${x(A)}, the daughter's ${x(a)} allele must be maternal.`
-        },
-        {
-          evidence: `Two sons from the same mother are ${male(A)} and ${male(a)}.`,
-          question: "Is the mother's genotype uniquely determined?",
-          correct: `Yes. She must be ${female(A, a)}`,
-          distractors: [
-            `No. She could be ${female(A, A)} or ${female(a, a)}`,
-            `Yes. She must be ${female(A, A)}`,
-            `Yes. She must be ${female(a, a)}`
-          ],
-          explanation:
-            `The mother has transmitted both ${x(A)} and ${x(a)} to sons, so she must possess both alleles.`
-        }
-      ];
+    const scenarios = [
+      {
+        cross1: cross(female(A, A), male(a)),
+        cross2: cross(female(a, a), male(A)),
+        target: `an offspring with ${l.recessiveTrait}`,
+        p1: "0",
+        p2: "1/2",
+        correct: "Cross 1: 0; Cross 2: 1/2",
+        explanation: `Cross 1 produces no recessive offspring. In Cross 2, every son is ${male(a)} and every daughter is ${female(A, a)}, so half of all offspring are recessive sons.`
+      },
+      {
+        cross1: cross(female(A, a), male(A)),
+        cross2: cross(female(A, A), male(a)),
+        target: `a son with ${l.recessiveTrait}`,
+        p1: "1/4",
+        p2: "0",
+        correct: "Cross 1: 1/4; Cross 2: 0",
+        explanation: `In Cross 1, the mother gives ${x(a)} with probability 1/2 and the father gives Y with probability 1/2. Cross 2 mothers cannot provide ${x(a)}.`
+      },
+      {
+        cross1: cross(female(A, a), male(a)),
+        cross2: cross(female(a, a), male(A)),
+        target: `a daughter with ${l.recessiveTrait}`,
+        p1: "1/4",
+        p2: "0",
+        correct: "Cross 1: 1/4; Cross 2: 0",
+        explanation: `Cross 1 can produce ${female(a, a)} daughters when the mother contributes ${x(a)}. In Cross 2, every daughter receives ${x(A)} from the father.`
+      },
+      {
+        cross1: cross(female(A, a), male(A)),
+        cross2: cross(female(A, A), male(a)),
+        target: `a heterozygous daughter`,
+        p1: "1/4",
+        p2: "1/2",
+        correct: "Cross 1: 1/4; Cross 2: 1/2",
+        explanation: `Cross 1 requires a daughter and maternal ${x(a)} transmission. In Cross 2, every daughter is ${female(A, a)}.`
+      },
+      {
+        cross1: cross(female(a, a), male(a)),
+        cross2: cross(female(a, a), male(A)),
+        target: `an offspring with ${l.recessiveTrait}`,
+        p1: "1",
+        p2: "1/2",
+        correct: "Cross 1: 1; Cross 2: 1/2",
+        explanation: `Cross 1 makes every offspring recessive. In Cross 2, all sons are recessive but all daughters receive ${x(A)} and show the dominant phenotype.`
+      }
+    ];
 
-      const item = pick(scenarios);
+    const item = pick(scenarios);
+    const distractors = unique([
+      `Cross 1: ${item.p2}; Cross 2: ${item.p1}`,
+      "Cross 1: 1/2; Cross 2: 1/2",
+      "Cross 1: 0; Cross 2: 0",
+      "Cross 1: 1; Cross 2: 1",
+      "The probabilities cannot differ in reciprocal crosses"
+    ]).filter((value) => value !== item.correct);
 
-      return q(
-        "xl4-evidence-sufficiency",
-        "xlinked",
-        "advanced",
-        `${ruleText(locus)} ${item.evidence}`,
-        item.question,
-        shuffle([item.correct, ...item.distractors]),
-        item.correct,
-        "Identify which parent must supply each offspring sex chromosome, then decide whether the evidence allows one parental genotype or several.",
-        item.explanation
-      );
-    }
-  );
+    return q(
+      "xl4-reciprocal-probability",
+      "xlinked",
+      "advanced",
+      `${ruleText(l)} Cross 1: ${item.cross1}. Cross 2: ${item.cross2}.`,
+      `What is the probability of ${item.target} in each cross?`,
+      shuffle([item.correct, ...distractors]).slice(0, 4),
+      item.correct,
+      "List maternal eggs and paternal sperm for each cross, then count the requested offspring class out of all equally likely combinations.",
+      item.explanation
+    );
+  });
+
+  // -------------------------------------------------------------------------
+  // ADVANCED — evaluate explanations of reciprocal-cross asymmetry
+  // -------------------------------------------------------------------------
+
+  register("advanced", "xl4-explain-asymmetry", "explaining reciprocal-cross outcomes", () => {
+    const l = pick(loci);
+    const A = l.dominantAllele;
+    const a = l.recessiveAllele;
+
+    const scenarios = [
+      {
+        observation: `Crossing a ${female(A, A)} female with a ${male(a)} male produces dominant sons, but the reciprocal cross produces recessive sons.`,
+        correct: "Sons receive their only X chromosome from the mother, so reversing the maternal genotype reverses the allele inherited by sons",
+        explanation: `The father contributes Y to sons. Therefore, the mother's genotype directly determines whether sons receive ${x(A)} or ${x(a)}.`
+      },
+      {
+        observation: `The reciprocal crosses ${cross(female(A, A), male(a))} and ${cross(female(a, a), male(A))} produce daughters with the same genotype but sons with different phenotypes.`,
+        correct: "Daughters receive one X from each parent, whereas sons receive X only from the mother",
+        explanation: `Both daughter classes are ${female(A, a)}, but sons copy the maternal X-linked state because their father supplies Y.`
+      },
+      {
+        observation: `A recessive father affects the genotype of every daughter but does not transmit his recessive X-linked allele to any son.`,
+        correct: "Fathers transmit their X chromosome to daughters and their Y chromosome to sons",
+        explanation: `This sex-specific transmission pattern creates the characteristic asymmetry of reciprocal X-linked crosses.`
+      },
+      {
+        observation: `Two reciprocal crosses have identical parental phenotypes but different proportions of recessive offspring.`,
+        correct: "The same phenotype can correspond to different sex-specific transmission routes in X-linked inheritance",
+        explanation: `Which parent carries an allele matters because mothers transmit X to both sexes, while fathers transmit X only to daughters.`
+      },
+      {
+        observation: `Changing only the father's X-linked genotype changes all daughters but leaves the sons unchanged when the mother's genotype is fixed.`,
+        correct: "Every daughter receives the father's X chromosome, while every son receives the father's Y chromosome",
+        explanation: `With a fixed mother, sons receive the same maternal X distribution. Daughters, however, receive whichever X allele the father carries.`
+      }
+    ];
+
+    const item = pick(scenarios);
+    const distractors = [
+      "Dominant alleles become recessive when they are inherited from the mother",
+      "The Y chromosome carries a matching allele that masks the X-linked allele",
+      "Fathers transmit their X chromosome directly to sons",
+      "Reciprocal crosses change the segregation rules of meiosis",
+      "The sex of the parent changes the molecular function of the allele"
+    ];
+
+    return q(
+      "xl4-explain-asymmetry",
+      "xlinked",
+      "advanced",
+      `${ruleText(l)} ${item.observation}`,
+      "Which explanation best accounts for the observation?",
+      shuffle([item.correct, ...distractors]).slice(0, 4),
+      item.correct,
+      "Use the sex-specific inheritance route: mothers give X to every child; fathers give X to daughters and Y to sons.",
+      item.explanation
+    );
+  });
 }
