@@ -417,6 +417,391 @@
   }
 }
 
+
+/* === Premium visual polish pass === */
+:root{
+  --engine-ink:#17332d;
+  --engine-muted:#60756e;
+  --engine-line:rgba(23,92,76,.12);
+  --engine-surface:rgba(255,255,255,.88);
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:
+    radial-gradient(circle at 10% 5%,rgba(48,174,145,.10),transparent 27%),
+    radial-gradient(circle at 90% 20%,rgba(124,63,179,.07),transparent 25%),
+    linear-gradient(180deg,#f5faf8 0%,#f8fafc 42%,#f5f7fa 100%);
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.32;
+  background-image:
+    radial-gradient(circle at center,rgba(25,111,91,.16) 1px,transparent 1.2px);
+  background-size:32px 32px;
+  mask-image:linear-gradient(to bottom,black,transparent 72%);
+  z-index:-1;
+}
+
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:rgba(250,253,252,.88);
+  backdrop-filter:blur(18px) saturate(145%);
+  -webkit-backdrop-filter:blur(18px) saturate(145%);
+  border-bottom:1px solid rgba(24,102,83,.10);
+  box-shadow:0 8px 30px rgba(29,79,66,.06);
+}
+
+.site-nav{min-height:68px}
+
+.site-nav-links a{
+  position:relative;
+  border-radius:10px;
+  padding:9px 11px;
+  transition:background .2s ease,color .2s ease,transform .2s ease;
+}
+
+.site-nav-links a:hover{
+  background:rgba(24,138,114,.09);
+  transform:translateY(-1px);
+}
+
+.site-nav-links a.nav-active{
+  color:#0d715d;
+  background:#e1f4ee;
+  font-weight:900;
+}
+
+.site-nav-links a.nav-active::after{
+  content:"";
+  position:absolute;
+  left:11px;
+  right:11px;
+  bottom:4px;
+  height:2px;
+  border-radius:999px;
+  background:#178a72;
+}
+
+.app{position:relative}
+
+.engine-hero{
+  isolation:isolate;
+  border:1px solid rgba(255,255,255,.24);
+  background:
+    radial-gradient(circle at 86% 22%,rgba(255,255,255,.14),transparent 24%),
+    linear-gradient(135deg,#0a5148 0%,#117762 50%,#2aa486 100%);
+}
+
+.engine-hero::after{
+  content:"";
+  position:absolute;
+  inset:auto -6% -46% 34%;
+  height:72%;
+  border-radius:50%;
+  background:rgba(255,255,255,.06);
+  transform:rotate(-9deg);
+  z-index:0;
+}
+
+.engine-hero-primary,
+.engine-hero-secondary{
+  transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+}
+
+.engine-hero-primary:hover,
+.engine-hero-secondary:hover{transform:translateY(-2px)}
+
+.engine-hero-primary:hover{box-shadow:0 16px 34px rgba(0,0,0,.20)}
+.engine-hero-secondary:hover{background:rgba(255,255,255,.19)}
+
+.genetics-orbit{
+  position:relative;
+  width:210px;
+  height:210px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at center,rgba(255,255,255,.16),rgba(255,255,255,.04) 60%,transparent 61%);
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow:0 28px 58px rgba(0,0,0,.20),inset 0 0 45px rgba(255,255,255,.07);
+  animation:engineFloat 5.5s ease-in-out infinite;
+}
+
+.genetics-orbit::before,
+.genetics-orbit::after{
+  content:"";
+  position:absolute;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:50%;
+}
+.genetics-orbit::before{inset:20px}
+.genetics-orbit::after{inset:46px}
+
+.helix{
+  position:absolute;
+  left:77px;
+  top:32px;
+  width:56px;
+  height:146px;
+  border-left:5px solid rgba(255,255,255,.92);
+  border-right:5px solid rgba(191,255,236,.92);
+  border-radius:50%;
+  transform:rotate(18deg);
+}
+.helix::before{
+  content:"";
+  position:absolute;
+  inset:8px -4px;
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent 0 13px,
+    rgba(255,255,255,.76) 13px 16px,
+    transparent 16px 28px
+  );
+  transform:skewX(-18deg);
+}
+.helix-b{transform:rotate(198deg);opacity:.42}
+
+.chromosome{
+  position:absolute;
+  width:16px;
+  height:52px;
+  border-radius:999px;
+  background:linear-gradient(180deg,#fff,#bdeedf);
+  box-shadow:0 8px 18px rgba(0,0,0,.18);
+}
+.chromosome::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  transform:rotate(56deg);
+  background:inherit;
+}
+.chromosome-one{left:34px;top:48px;transform:rotate(-22deg)}
+.chromosome-two{right:32px;bottom:42px;transform:rotate(24deg)}
+
+.gene-dot{
+  position:absolute;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:#ffe47a;
+  box-shadow:0 0 0 6px rgba(255,228,122,.13),0 5px 14px rgba(0,0,0,.18);
+}
+.gene-dot-one{left:28px;bottom:43px}
+.gene-dot-two{right:24px;top:38px}
+.gene-dot-three{right:38px;top:104px;width:8px;height:8px}
+
+@keyframes engineFloat{
+  0%,100%{transform:translateY(0) rotate(-1deg)}
+  50%{transform:translateY(-10px) rotate(1deg)}
+}
+
+.engine-value-strip{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin:0 0 32px;
+}
+
+.engine-value-item{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  min-height:82px;
+  padding:15px 17px;
+  border:1px solid rgba(26,116,94,.11);
+  border-radius:18px;
+  background:rgba(255,255,255,.80);
+  backdrop-filter:blur(10px);
+  box-shadow:0 12px 30px rgba(25,71,59,.065);
+}
+
+.engine-value-icon{
+  flex:0 0 44px;
+  width:44px;height:44px;
+  display:grid;place-items:center;
+  border-radius:14px;
+  color:#0f6e5b;
+  background:linear-gradient(145deg,#e5f7f1,#d5efe7);
+  font-weight:950;
+  font-size:1.05rem;
+}
+
+.engine-value-item strong,
+.engine-value-item small{display:block}
+.engine-value-item strong{color:#17332d;font-size:.9rem;margin-bottom:3px}
+.engine-value-item small{color:#6a7d77;font-size:.76rem;line-height:1.35}
+
+.engine-topics{gap:18px}
+
+.engine-topic{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  transition:transform .24s ease,border-color .24s ease,box-shadow .24s ease;
+}
+
+.engine-topic::before{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:0;
+  height:4px;
+  background:linear-gradient(90deg,#1aa184,#72c8b4);
+  opacity:.72;
+}
+
+.engine-topic.developing:nth-of-type(5n+1)::before{background:linear-gradient(90deg,#d97706,#fbbf24)}
+.engine-topic.developing:nth-of-type(5n+2)::before{background:linear-gradient(90deg,#be185d,#f472b6)}
+.engine-topic.developing:nth-of-type(5n+3)::before{background:linear-gradient(90deg,#2563eb,#60a5fa)}
+.engine-topic.developing:nth-of-type(5n+4)::before{background:linear-gradient(90deg,#7c3aed,#a78bfa)}
+.engine-topic.developing:nth-of-type(5n+5)::before{background:linear-gradient(90deg,#0f766e,#5eead4)}
+
+.engine-topic.featured::before{display:none}
+
+.engine-topic:hover .engine-topic-icon{
+  transform:translateY(-3px) rotate(-2deg) scale(1.04);
+}
+
+.engine-topic-icon{
+  transition:transform .22s ease,box-shadow .22s ease;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.32);
+}
+
+.engine-topic:hover .engine-topic-arrow{transform:translateX(4px)}
+.engine-topic-arrow{display:inline-block;transition:transform .2s ease}
+
+.engine-topic-status{
+  white-space:nowrap;
+  box-shadow:inset 0 0 0 1px rgba(15,107,88,.05);
+}
+
+.featured .engine-topic-status{
+  color:#164d43;
+  background:rgba(255,255,255,.90);
+}
+
+.developing-status{
+  color:#7a5b12;
+  background:#fff6d8;
+  box-shadow:inset 0 0 0 1px rgba(168,116,0,.08);
+}
+
+.dashboard-grid{
+  gap:18px;
+}
+
+.mode-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(23,97,78,.12);
+  border-radius:22px;
+  background:rgba(255,255,255,.88);
+  box-shadow:0 12px 30px rgba(25,71,59,.07);
+  transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease;
+}
+
+.mode-card::before{
+  content:"";
+  position:absolute;
+  inset:0 auto 0 0;
+  width:5px;
+  background:var(--mode-accent,#178a72);
+}
+
+.mode-card::after{
+  content:"Open →";
+  position:absolute;
+  right:18px;
+  bottom:16px;
+  color:var(--mode-accent,#178a72);
+  font-size:.75rem;
+  font-weight:900;
+  opacity:.86;
+  transition:transform .2s ease;
+}
+
+.mode-card:hover{
+  transform:translateY(-5px);
+  border-color:color-mix(in srgb,var(--mode-accent,#178a72) 42%,white);
+  box-shadow:0 22px 44px rgba(25,71,59,.13);
+}
+.mode-card:hover::after{transform:translateX(4px)}
+
+.mode-card .mode-icon{
+  background:color-mix(in srgb,var(--mode-accent,#178a72) 13%,white);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--mode-accent,#178a72) 16%,white);
+  transition:transform .2s ease;
+}
+.mode-card:hover .mode-icon{transform:translateY(-3px) scale(1.04)}
+
+.mode-card .mode-tag{
+  margin-right:68px;
+  background:color-mix(in srgb,var(--mode-accent,#178a72) 11%,white);
+  color:color-mix(in srgb,var(--mode-accent,#178a72) 82%,#17332d);
+}
+
+.mode-random{--mode-accent:#0f8a72}
+.mode-topic{--mode-accent:#2563eb}
+.mode-challenge{--mode-accent:#7c3aed}
+.mode-daily{--mode-accent:#e05a20}
+.mode-timed{--mode-accent:#c49000}
+.mode-stats{--mode-accent:#0f6f9f}
+
+.engine-topic,
+.mode-card,
+.engine-value-item{
+  animation:engineReveal .55s ease both;
+}
+.engine-topic:nth-child(2),.mode-card:nth-child(2){animation-delay:.04s}
+.engine-topic:nth-child(3),.mode-card:nth-child(3){animation-delay:.08s}
+.engine-topic:nth-child(4),.mode-card:nth-child(4){animation-delay:.12s}
+.engine-topic:nth-child(5),.mode-card:nth-child(5){animation-delay:.16s}
+.engine-topic:nth-child(6),.mode-card:nth-child(6){animation-delay:.20s}
+
+@keyframes engineReveal{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@media(max-width:950px){
+  .engine-value-strip{grid-template-columns:1fr}
+}
+
+@media(max-width:760px){
+  .site-nav-links{
+    overflow-x:auto;
+    padding-bottom:5px;
+    scrollbar-width:none;
+  }
+  .site-nav-links::-webkit-scrollbar{display:none}
+  .site-nav-links a{white-space:nowrap}
+}
+
+@media(max-width:620px){
+  .engine-value-item{min-height:74px}
+  .mode-card::after{right:14px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,
+  *::before,
+  *::after{
+    scroll-behavior:auto !important;
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+}
+
 </style>
 
 </head>
@@ -430,7 +815,7 @@
         <span>www.ampossot.com</span>
       </a>
       <div class="site-nav-links" aria-label="Primary navigation">
-        <a href="https://www.ampossot.com/virtual">Tools</a>
+        <a class="nav-active" href="https://www.ampossot.com/virtual">Tools</a>
         <a href="https://www.ampossot.com/teaching">Teaching</a>
         <a href="https://www.ampossot.com/#research">Research</a>
         <a href="https://www.ampossot.com/#about">About</a>
@@ -454,16 +839,31 @@
         </div>
       </div>
       <div class="engine-hero-art" aria-hidden="true">
-        <div class="engine-dna">🧬</div>
+        <div class="genetics-orbit">
+          <div class="helix helix-a"></div>
+          <div class="helix helix-b"></div>
+          <div class="chromosome chromosome-one"></div>
+          <div class="chromosome chromosome-two"></div>
+          <div class="gene-dot gene-dot-one"></div>
+          <div class="gene-dot gene-dot-two"></div>
+          <div class="gene-dot gene-dot-three"></div>
+        </div>
       </div>
     </section>
 
     
-<div class="engine-notice">
-      <div class="engine-notice-icon">🧪</div>
-      <div>
-        <strong>Actively developed and continuously improved</strong>
-        <p>Monohybrid and Gametes &amp; Meiosis have been fully rebuilt. The remaining chapters are being upgraded using the same learning-objective approach.</p>
+<div class="engine-value-strip" aria-label="Practice tool benefits">
+      <div class="engine-value-item">
+        <span class="engine-value-icon">10</span>
+        <span><strong>Focused sessions</strong><small>Ten questions at a time</small></span>
+      </div>
+      <div class="engine-value-item">
+        <span class="engine-value-icon">✓</span>
+        <span><strong>Immediate explanations</strong><small>Learn from every answer</small></span>
+      </div>
+      <div class="engine-value-item">
+        <span class="engine-value-icon">↻</span>
+        <span><strong>Progress saved locally</strong><small>Continue in the same browser</small></span>
       </div>
     </div>
 
@@ -482,63 +882,63 @@
 
         <div class="engine-topics">
           <button class="engine-topic featured" type="button" data-topic-launch="monohybrid">
-            <div class="engine-topic-top"><span class="engine-topic-icon">🌱</span><span class="engine-topic-status">Fully rebuilt</span></div>
+            <div class="engine-topic-top"><span class="engine-topic-icon">🌱</span><span class="engine-topic-status">✓ New objective engine</span></div>
             <div><h3>Monohybrid Inheritance</h3><p>Dominance, Punnett logic, reverse inference, probability, penetrance, and evidence.</p></div>
-            <div class="engine-topic-bottom"><span>42 reasoning families</span><span class="engine-topic-arrow">Begin →</span></div>
+            <div class="engine-topic-bottom"><span>42 reasoning families</span><span class="engine-topic-arrow">Start chapter →</span></div>
           </button>
 
           <button class="engine-topic featured blue" type="button" data-topic-launch="gametes">
-            <div class="engine-topic-top"><span class="engine-topic-icon">🧬</span><span class="engine-topic-status">Fully rebuilt</span></div>
+            <div class="engine-topic-top"><span class="engine-topic-icon">🧬</span><span class="engine-topic-status">✓ New objective engine</span></div>
             <div><h3>Gametes &amp; Meiosis</h3><p>Chromosomes, segregation, assortment, crossing over, linkage, and nondisjunction.</p></div>
-            <div class="engine-topic-bottom"><span>111 reasoning families</span><span class="engine-topic-arrow">Begin →</span></div>
+            <div class="engine-topic-bottom"><span>111 reasoning families</span><span class="engine-topic-arrow">Start chapter →</span></div>
           </button>
 
-          <button class="engine-topic" type="button" data-topic-launch="testcross">
-            <div class="engine-topic-top"><span class="engine-topic-icon">🔎</span></div>
+          <button class="engine-topic developing" type="button" data-topic-launch="testcross">
+            <div class="engine-topic-top"><span class="engine-topic-icon">🔎</span><span class="engine-topic-status developing-status">In development</span></div>
             <div><h3>Testcrosses</h3><p>Infer unknown genotypes and evaluate evidence from offspring.</p></div>
-            <div class="engine-topic-bottom"><span>Reverse inference</span><span class="engine-topic-arrow">Practise →</span></div>
+            <div class="engine-topic-bottom"><span>Reverse inference</span><span class="engine-topic-arrow">Practice now →</span></div>
           </button>
 
           <button class="engine-topic featured dihybrid-featured" type="button" data-topic-launch="dihybrid">
-            <div class="engine-topic-top"><span class="engine-topic-icon">🧩</span><span class="engine-topic-status">Fully rebuilt</span></div>
+            <div class="engine-topic-top"><span class="engine-topic-icon">🧩</span><span class="engine-topic-status">✓ New objective engine</span></div>
             <div><h3>Dihybrid Inheritance</h3><p>Independent assortment, gamete probability, product rules, expected ratios, reverse inference, and evidence.</p></div>
-            <div class="engine-topic-bottom"><span>Two-gene reasoning</span><span class="engine-topic-arrow">Begin →</span></div>
+            <div class="engine-topic-bottom"><span>Two-gene reasoning</span><span class="engine-topic-arrow">Start chapter →</span></div>
           </button>
 
-          <button class="engine-topic" type="button" data-topic-launch="nonmendelian">
-            <div class="engine-topic-top"><span class="engine-topic-icon">🎨</span></div>
+          <button class="engine-topic developing" type="button" data-topic-launch="nonmendelian">
+            <div class="engine-topic-top"><span class="engine-topic-icon">🎨</span><span class="engine-topic-status developing-status">In development</span></div>
             <div><h3>Non-Mendelian Inheritance</h3><p>Incomplete dominance, codominance, penetrance, and expressivity.</p></div>
-            <div class="engine-topic-bottom"><span>Beyond simple dominance</span><span class="engine-topic-arrow">Practise →</span></div>
+            <div class="engine-topic-bottom"><span>Beyond simple dominance</span><span class="engine-topic-arrow">Practice now →</span></div>
           </button>
 
-          <button class="engine-topic" type="button" data-topic-launch="sexlinked">
-            <div class="engine-topic-top"><span class="engine-topic-icon">♀️</span></div>
+          <button class="engine-topic developing" type="button" data-topic-launch="sexlinked">
+            <div class="engine-topic-top"><span class="engine-topic-icon">♀️</span><span class="engine-topic-status developing-status">In development</span></div>
             <div><h3>X-linked Inheritance</h3><p>Carriers, reciprocal crosses, transmission patterns, and risk.</p></div>
-            <div class="engine-topic-bottom"><span>Sex-linked traits</span><span class="engine-topic-arrow">Practise →</span></div>
+            <div class="engine-topic-bottom"><span>Sex-linked traits</span><span class="engine-topic-arrow">Practice now →</span></div>
           </button>
 
-          <button class="engine-topic" type="button" data-topic-launch="chisquare">
-            <div class="engine-topic-top"><span class="engine-topic-icon">📊</span></div>
+          <button class="engine-topic developing" type="button" data-topic-launch="chisquare">
+            <div class="engine-topic-top"><span class="engine-topic-icon">📊</span><span class="engine-topic-status developing-status">In development</span></div>
             <div><h3>Chi-square Reasoning</h3><p>Expected counts, degrees of freedom, hypotheses, and interpretation.</p></div>
-            <div class="engine-topic-bottom"><span>Data analysis</span><span class="engine-topic-arrow">Practise →</span></div>
+            <div class="engine-topic-bottom"><span>Data analysis</span><span class="engine-topic-arrow">Practice now →</span></div>
           </button>
 
-          <button class="engine-topic" type="button" data-topic-launch="pedigree">
-            <div class="engine-topic-top"><span class="engine-topic-icon">👪</span></div>
+          <button class="engine-topic developing" type="button" data-topic-launch="pedigree">
+            <div class="engine-topic-top"><span class="engine-topic-icon">👪</span><span class="engine-topic-status developing-status">In development</span></div>
             <div><h3>Pedigree Inference</h3><p>Recognize inheritance patterns, infer carriers, and calculate risk.</p></div>
-            <div class="engine-topic-bottom"><span>Family genetics</span><span class="engine-topic-arrow">Practise →</span></div>
+            <div class="engine-topic-bottom"><span>Family genetics</span><span class="engine-topic-arrow">Practice now →</span></div>
           </button>
 
-          <button class="engine-topic" type="button" data-topic-launch="linkage">
-            <div class="engine-topic-top"><span class="engine-topic-icon">🧭</span></div>
+          <button class="engine-topic developing" type="button" data-topic-launch="linkage">
+            <div class="engine-topic-top"><span class="engine-topic-icon">🧭</span><span class="engine-topic-status developing-status">In development</span></div>
             <div><h3>Linkage &amp; Recombination</h3><p>Phase, parental classes, mapping, and crossover interpretation.</p></div>
-            <div class="engine-topic-bottom"><span>32 question families</span><span class="engine-topic-arrow">Practise →</span></div>
+            <div class="engine-topic-bottom"><span>32 question families</span><span class="engine-topic-arrow">Practice now →</span></div>
           </button>
 
-          <button class="engine-topic" type="button" data-topic-launch="interactions">
-            <div class="engine-topic-top"><span class="engine-topic-icon">🧪</span></div>
+          <button class="engine-topic developing" type="button" data-topic-launch="interactions">
+            <div class="engine-topic-top"><span class="engine-topic-icon">🧪</span><span class="engine-topic-status developing-status">In development</span></div>
             <div><h3>Gene Interactions</h3><p>Epistasis, pathway reasoning, modified ratios, and interacting loci.</p></div>
-            <div class="engine-topic-bottom"><span>Epistasis</span><span class="engine-topic-arrow">Practise →</span></div>
+            <div class="engine-topic-bottom"><span>Epistasis</span><span class="engine-topic-arrow">Practice now →</span></div>
           </button>
         </div>
 
@@ -555,7 +955,7 @@
       </div>
 
       <div class="dashboard-grid">
-        <button class="mode-card" type="button" data-mode="random">
+        <button class="mode-card mode-random" type="button" data-mode="random">
           <div class="mode-icon">🧬</div>
           <div>
             <h3>Random Practice</h3>
@@ -564,7 +964,7 @@
           <span class="mode-tag">10 questions</span>
         </button>
 
-        <button class="mode-card" type="button" data-mode="topic">
+        <button class="mode-card mode-topic" type="button" data-mode="topic">
           <div class="mode-icon">🎯</div>
           <div>
             <h3>Topic Practice</h3>
@@ -573,7 +973,7 @@
           <span class="mode-tag">Custom focus</span>
         </button>
 
-        <button class="mode-card" type="button" data-mode="challenge">
+        <button class="mode-card mode-challenge" type="button" data-mode="challenge">
           <div class="mode-icon">📈</div>
           <div>
             <h3>Challenge Mode</h3>
@@ -582,7 +982,7 @@
           <span class="mode-tag">Advanced</span>
         </button>
 
-        <button class="mode-card" type="button" data-mode="daily">
+        <button class="mode-card mode-daily" type="button" data-mode="daily">
           <div class="mode-icon">🔥</div>
           <div>
             <h3>Daily Challenge</h3>
@@ -591,7 +991,7 @@
           <span class="mode-tag">5 questions</span>
         </button>
 
-        <button class="mode-card" type="button" data-mode="timed">
+        <button class="mode-card mode-timed" type="button" data-mode="timed">
           <div class="mode-icon">🏆</div>
           <div>
             <h3>Timed Quiz</h3>
@@ -600,7 +1000,7 @@
           <span class="mode-tag">5 minutes</span>
         </button>
 
-        <button class="mode-card" type="button" data-mode="stats">
+        <button class="mode-card mode-stats" type="button" data-mode="stats">
           <div class="mode-icon">📊</div>
           <div>
             <h3>My Statistics</h3>
@@ -650,7 +1050,7 @@
             <option value="monohybrid">Monohybrid crosses</option>
             <option value="gametes">Gametes &amp; Meiosis</option>
             <option value="testcross">Testcrosses and reverse inference</option>
-            <option value="dihybrid">Dihybrid probability</option>
+            <option value="dihybrid">Dihybrid Inheritance</option>
             <option value="nonmendelian">Incomplete dominance and codominance</option>
             <option value="sexlinked">X-linked inheritance</option>
             <option value="chisquare">Chi-square reasoning</option>
